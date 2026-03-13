@@ -1,0 +1,2441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Elar — Brand Intelligence Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1208;
+  --cream: #f8f4ed;
+  --parchment: #f0e9dc;
+  --gold: #c9963a;
+  --gold-light: #e8c87a;
+  --gold-dim: #8a6420;
+  --saffron: #e07b2a;
+  --terracotta: #c45e35;
+  --sage: #4a7c5a;
+  --indigo: #2e3c7e;
+  --deep-purple: #4b3d8f;
+  --rose: #b5414a;
+  --border: rgba(201,150,58,0.18);
+  --border-med: rgba(201,150,58,0.32);
+  --border-strong: rgba(201,150,58,0.5);
+  --card: rgba(255,251,243,0.85);
+  --card-hover: rgba(255,248,235,0.98);
+  --shadow: 0 4px 32px rgba(26,18,8,0.07);
+  --shadow-hover: 0 8px 48px rgba(26,18,8,0.12);
+  --r: 6px;
+  --r-lg: 10px;
+  --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-size: 14px;
+}
+
+/* TEXTURE LAYERS */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 15% 10%, rgba(201,150,58,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at 85% 85%, rgba(196,94,53,0.04) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 70% at 50% 50%, rgba(46,60,126,0.025) 0%, transparent 65%);
+  pointer-events: none; z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='0.7' fill='%23c9963a' opacity='0.1'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0;
+}
+
+/* ── SIDEBAR ─────────────────────────────────────── */
+.sidebar {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: 240px;
+  background: rgba(248,244,237,0.97);
+  border-right: 1px solid var(--border-med);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.sidebar-brand {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand-eyebrow {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.brand-eyebrow::before, .brand-eyebrow::after {
+  content: '';
+  height: 1px; width: 20px;
+  background: var(--gold); opacity: 0.5;
+}
+
+.brand-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.brand-name em { font-style: italic; color: var(--gold-dim); }
+.brand-tagline {
+  font-size: 11px;
+  color: #9a8870;
+  margin-top: 6px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.nav-section {
+  padding: 16px 14px 0;
+}
+.nav-section-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  padding: 0 8px 8px;
+  opacity: 0.7;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--r);
+  cursor: pointer;
+  color: #7a6a52;
+  font-size: 13px;
+  font-weight: 400;
+  transition: all var(--transition);
+  margin-bottom: 2px;
+  position: relative;
+  border: 1px solid transparent;
+  user-select: none;
+}
+.nav-item:hover {
+  background: rgba(201,150,58,0.07);
+  color: var(--ink);
+}
+.nav-item.active {
+  background: rgba(201,150,58,0.1);
+  color: var(--ink);
+  font-weight: 500;
+  border-color: var(--border);
+}
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20%; bottom: 20%;
+  width: 2.5px;
+  background: var(--gold);
+  border-radius: 0 2px 2px 0;
+}
+.nav-icon {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+  transition: background var(--transition);
+}
+.nav-item.active .nav-icon { background: rgba(201,150,58,0.12); }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: #a89880;
+}
+.sidebar-footer strong { color: var(--gold-dim); }
+
+/* SUBTAB row inside tab */
+.sub-nav {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 28px;
+  background: rgba(240,233,220,0.4);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 4px;
+  width: fit-content;
+}
+.sub-tab {
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #8a7a62;
+  transition: all var(--transition);
+  border: none;
+  background: none;
+  outline: none;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+.sub-tab.active {
+  background: var(--cream);
+  color: var(--ink);
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+
+/* ── MAIN ─────────────────────────────────────── */
+.main {
+  margin-left: 240px;
+  min-height: 100vh;
+  position: relative;
+  z-index: 5;
+}
+
+.page-header {
+  padding: 36px 48px 24px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(248,244,237,0.97) 60%, transparent 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.page-title-area {}
+.page-eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.page-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.page-title em { font-style: italic; color: var(--gold-dim); }
+.page-subtitle {
+  font-size: 12.5px;
+  color: #8a7a62;
+  margin-top: 4px;
+}
+
+.header-stats {
+  display: flex;
+  gap: 1px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.hstat {
+  padding: 10px 18px;
+  background: var(--card);
+  text-align: center;
+}
+.hstat:not(:last-child) { border-right: 1px solid var(--border); }
+.hstat-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1;
+}
+.hstat-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9a8870;
+  margin-top: 3px;
+}
+
+.content {
+  padding: 36px 48px 80px;
+}
+
+/* ── PANELS ─────────────────────────────────────── */
+.panel { display: none; animation: fadeUp 0.3s ease; }
+.panel.active { display: block; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── CARDS ─────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 24px 26px;
+  transition: box-shadow var(--transition), border-color var(--transition);
+}
+.card:hover { box-shadow: var(--shadow); border-color: var(--border-med); }
+
+.card-heading {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-heading::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── KPI GRID ─────────────────────────────────────── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.kpi {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition);
+}
+.kpi::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  opacity: 0.5;
+}
+.kpi:hover { box-shadow: var(--shadow); border-color: var(--border-med); }
+.kpi-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 34px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.kpi-val.green { color: var(--sage); }
+.kpi-val.amber { color: var(--saffron); }
+.kpi-val.red { color: var(--rose); }
+.kpi-val.blue { color: var(--indigo); }
+.kpi-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8a7a62;
+  margin-bottom: 2px;
+}
+.kpi-sub { font-size: 11px; color: #a8977c; }
+
+/* ── GRIDS ─────────────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+
+/* ── BARS ─────────────────────────────────────── */
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+  font-size: 11.5px;
+}
+.bar-lbl {
+  color: #6a5d48;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bar-track {
+  flex: 1;
+  height: 10px;
+  background: rgba(201,150,58,0.09);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  width: 0;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.bar-val {
+  font-size: 11px;
+  color: var(--ink);
+  font-weight: 500;
+  text-align: right;
+  flex-shrink: 0;
+  width: 58px;
+}
+
+/* ── TAGS / PILLS ─────────────────────────────────────── */
+.tag {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 99px;
+  margin: 2px 2px 2px 0;
+}
+.tg { background: #EAF3DE; color: #3B6D11; }
+.tb { background: #E6F1FB; color: #185FA5; }
+.ta { background: #FAEEDA; color: #854F0B; }
+.tp { background: #EEEDFE; color: #3C3489; }
+.tc { background: #FAECE7; color: #993C1D; }
+.tn { background: rgba(26,18,8,0.07); color: #4a3e2e; }
+.ts { background: #E1F5EE; color: #085041; }
+
+/* ── INSIGHT CARD ─────────────────────────────────────── */
+.insight {
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+  margin-bottom: 10px;
+  transition: background var(--transition), border-color var(--transition);
+  background: var(--card);
+}
+.insight:hover { background: var(--card-hover); border-color: var(--border-med); }
+.insight-head {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 5px;
+}
+.insight-body {
+  font-size: 12px;
+  color: #6a5d48;
+  margin: 0;
+  line-height: 1.65;
+}
+
+/* ── SECTION LABEL ─────────────────────────────────────── */
+.sec-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+/* ── ASK BTN ─────────────────────────────────────── */
+.ask-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-family: 'Outfit', sans-serif;
+  border: 1px solid var(--border-med);
+  background: rgba(201,150,58,0.05);
+  color: var(--gold-dim);
+  border-radius: var(--r);
+  padding: 7px 14px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all var(--transition);
+  font-weight: 500;
+}
+.ask-btn:hover {
+  background: rgba(201,150,58,0.12);
+  border-color: var(--border-strong);
+  color: var(--ink);
+}
+.ask-btn::after { content: '↗'; font-size: 11px; }
+
+/* ── TRUTH BOX ─────────────────────────────────────── */
+.truth-box {
+  background: linear-gradient(135deg, #EEEDFE 0%, #e8e6fd 100%);
+  border: 1px solid rgba(127,119,221,0.3);
+  border-radius: var(--r-lg);
+  padding: 22px 26px;
+  position: relative;
+  overflow: hidden;
+}
+.truth-box::before {
+  content: '"';
+  position: absolute;
+  top: -10px; left: 16px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 80px;
+  color: rgba(127,119,221,0.15);
+  line-height: 1;
+}
+.truth-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #26215C;
+  margin-bottom: 10px;
+  line-height: 1.4;
+  position: relative;
+}
+.truth-body {
+  font-size: 13px;
+  color: #3C3489;
+  margin: 0;
+  line-height: 1.75;
+  position: relative;
+}
+
+/* ── TENSION GRID ─────────────────────────────────────── */
+.tension-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.tension-card { border-radius: var(--r-lg); padding: 18px 20px; }
+.tc-left { background: #E1F5EE; border: 1px solid rgba(15,110,86,0.15); }
+.tc-right { background: #FAEEDA; border: 1px solid rgba(224,123,42,0.15); }
+.tc-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.tc-left .tc-label { color: #085041; }
+.tc-right .tc-label { color: #633806; }
+.tc-text { font-size: 13px; line-height: 1.65; margin: 0; }
+.tc-left .tc-text { color: #0F6E56; }
+.tc-right .tc-text { color: #854F0B; }
+
+/* ── PERSONA ─────────────────────────────────────── */
+.persona {
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 20px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  cursor: pointer;
+  background: var(--card);
+  transition: all var(--transition);
+}
+.persona:hover { background: var(--card-hover); border-color: var(--border-med); box-shadow: var(--shadow); }
+.persona-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600;
+  flex-shrink: 0;
+}
+.av-1 { background: #EEEDFE; color: #3C3489; }
+.av-2 { background: #E1F5EE; color: #085041; }
+.av-3 { background: #FAEEDA; color: #854F0B; }
+.av-4 { background: #FAECE7; color: #993C1D; }
+.persona-name { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+.persona-desc { font-size: 12px; color: #6a5d48; margin-bottom: 8px; line-height: 1.55; }
+
+/* ── VOICE CARD ─────────────────────────────────────── */
+.voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.voice-card { border-radius: var(--r-lg); padding: 16px 18px; }
+.vc-1 { background: #EEEDFE; border: 1px solid rgba(127,119,221,0.2); }
+.vc-2 { background: #E1F5EE; border: 1px solid rgba(15,110,86,0.15); }
+.vc-3 { background: #FAECE7; border: 1px solid rgba(216,90,48,0.15); }
+.vc-4 { background: #FAEEDA; border: 1px solid rgba(224,123,42,0.15); }
+.vc-1 .vc-title { color: #3C3489; }
+.vc-2 .vc-title { color: #085041; }
+.vc-3 .vc-title { color: #993C1D; }
+.vc-4 .vc-title { color: #854F0B; }
+.vc-1 .vc-body { color: #534AB7; }
+.vc-2 .vc-body { color: #0F6E56; }
+.vc-3 .vc-body { color: #D85A30; }
+.vc-4 .vc-body { color: #BA7517; }
+.vc-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.vc-body { font-size: 12px; margin: 0; line-height: 1.65; }
+
+/* ── ARC ─────────────────────────────────────── */
+.arc-step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding-bottom: 18px;
+  position: relative;
+}
+.arc-step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 13px; top: 32px; bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, var(--border-med) 0%, transparent 100%);
+}
+.arc-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border-med);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600;
+  color: var(--gold-dim);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.arc-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.arc-body { font-size: 12px; color: #6a5d48; line-height: 1.65; }
+
+/* ── COPY BLOCK ─────────────────────────────────────── */
+.copy-block {
+  background: rgba(240,233,220,0.5);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+}
+.copy-context {
+  font-size: 10px;
+  color: var(--gold-dim);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.copy-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: var(--ink);
+  font-style: italic;
+  line-height: 1.7;
+}
+
+/* ── AVOID ROW ─────────────────────────────────────── */
+.avoid-row {
+  display: flex; gap: 12px;
+  margin-bottom: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: var(--r);
+  background: rgba(252,235,235,0.4);
+  border: 1px solid rgba(163,45,45,0.1);
+}
+.avoid-icon {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: #FCEBEB;
+  border: 1px solid rgba(163,45,45,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  color: #A32D2D;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.avoid-text { font-size: 12.5px; color: #6a5d48; line-height: 1.6; }
+.avoid-text strong { color: var(--ink); font-weight: 600; }
+
+/* ── TIER CARD ─────────────────────────────────────── */
+.tier-card {
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-bottom: 12px;
+  background: var(--card);
+  transition: box-shadow var(--transition);
+}
+.tier-card:hover { box-shadow: var(--shadow); }
+.tier-head {
+  padding: 16px 20px 14px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+.tier-badge {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 99px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.tier-name { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.tier-price { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 500; line-height: 1; }
+.tier-price-sub { font-size: 11px; color: #8a7a62; margin-top: 3px; }
+.tier-body { padding: 0 20px 18px; border-top: 1px solid var(--border); padding-top: 14px; }
+.tier-desc { font-size: 12.5px; color: #6a5d48; line-height: 1.65; margin-bottom: 12px; }
+.sku-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.t-entry .tier-head { background: #F1EFE8; }
+.t-entry .tier-name { color: #2C2C2A; }
+.t-entry .tier-price { color: #444441; }
+.t-entry .tier-badge { background: #D3D1C7; color: #444441; }
+.t-core .tier-head { background: #EEEDFE; }
+.t-core .tier-name { color: #26215C; }
+.t-core .tier-price { color: #3C3489; }
+.t-core .tier-badge { background: #CECBF6; color: #3C3489; }
+.t-sig .tier-head { background: #FAEEDA; }
+.t-sig .tier-name { color: #412402; }
+.t-sig .tier-price { color: #633806; }
+.t-sig .tier-badge { background: #FAC775; color: #633806; }
+.t-ltd .tier-head { background: #FAECE7; }
+.t-ltd .tier-name { color: #4A1B0C; }
+.t-ltd .tier-price { color: #993C1D; }
+.t-ltd .tier-badge { background: #F5C4B3; color: #993C1D; }
+
+/* ── MARGIN TABLE ─────────────────────────────────────── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.data-table th {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  text-align: left;
+  padding: 0 14px 10px 0;
+  border-bottom: 1px solid var(--border-med);
+}
+.data-table td {
+  padding: 11px 14px 11px 0;
+  border-bottom: 1px solid var(--border);
+  color: #6a5d48;
+  vertical-align: top;
+  line-height: 1.5;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table .val { font-weight: 600; color: var(--ink); }
+.data-table .good { color: #2e6640; font-weight: 600; }
+.data-table .warn { color: #8a4e10; font-weight: 600; }
+
+/* ── CHANNEL CARDS ─────────────────────────────────────── */
+.ch-card {
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 18px 20px;
+  background: var(--card);
+  transition: all var(--transition);
+}
+.ch-card:hover { box-shadow: var(--shadow); border-color: var(--border-med); }
+.ch-name { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.ch-price { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.ch-note { font-size: 12px; color: #6a5d48; line-height: 1.6; }
+.ch-d2c .ch-price { color: #3C3489; }
+.ch-myntra .ch-price { color: #854F0B; }
+.ch-popup .ch-price { color: #993C1D; }
+
+/* ── PSY CARD ─────────────────────────────────────── */
+.psy-card { border-radius: var(--r-lg); padding: 16px 18px; }
+.pc1 { background: #EEEDFE; border: 1px solid rgba(127,119,221,0.2); }
+.pc2 { background: #E1F5EE; border: 1px solid rgba(15,110,86,0.15); }
+.pc3 { background: #FAEEDA; border: 1px solid rgba(224,123,42,0.15); }
+.pc4 { background: #FAECE7; border: 1px solid rgba(216,90,48,0.15); }
+.pc1 .pc-title { color: #3C3489; } .pc1 .pc-body { color: #534AB7; }
+.pc2 .pc-title { color: #085041; } .pc2 .pc-body { color: #0F6E56; }
+.pc3 .pc-title { color: #854F0B; } .pc3 .pc-body { color: #BA7517; }
+.pc4 .pc-title { color: #993C1D; } .pc4 .pc-body { color: #D85A30; }
+.pc-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.pc-body { font-size: 12px; margin: 0; line-height: 1.65; }
+
+/* ── RULE LIST ─────────────────────────────────────── */
+.rule-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.rule-item { display: flex; gap: 12px; align-items: flex-start; }
+.rule-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+.rule-text { font-size: 13px; color: #6a5d48; line-height: 1.6; }
+.rule-text strong { color: var(--ink); font-weight: 600; }
+
+/* ── CLUSTER CARD ─────────────────────────────────────── */
+.cluster-card {
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all var(--transition);
+  background: var(--card);
+}
+.cluster-card:hover { box-shadow: var(--shadow-hover); border-color: var(--border-med); transform: translateY(-1px); }
+.cluster-head { padding: 14px 18px 12px; }
+.cluster-region {
+  font-size: 9.5px; font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.cluster-name { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+.cluster-sub { font-size: 12px; }
+.cluster-body {
+  padding: 12px 18px 16px;
+  border-top: 1px solid rgba(0,0,0,0.07);
+}
+.cluster-desc { font-size: 12px; color: #6a5d48; line-height: 1.65; margin-bottom: 10px; }
+
+.cl-1 .cluster-head { background: #FAEEDA; } .cl-1 .cluster-region { color: #854F0B; } .cl-1 .cluster-name { color: #412402; } .cl-1 .cluster-sub { color: #854F0B; }
+.cl-2 .cluster-head { background: #EEEDFE; } .cl-2 .cluster-region { color: #534AB7; } .cl-2 .cluster-name { color: #26215C; } .cl-2 .cluster-sub { color: #534AB7; }
+.cl-3 .cluster-head { background: #FAECE7; } .cl-3 .cluster-region { color: #993C1D; } .cl-3 .cluster-name { color: #4A1B0C; } .cl-3 .cluster-sub { color: #993C1D; }
+.cl-4 .cluster-head { background: #E1F5EE; } .cl-4 .cluster-region { color: #0F6E56; } .cl-4 .cluster-name { color: #04342C; } .cl-4 .cluster-sub { color: #0F6E56; }
+.cl-5 .cluster-head { background: #FCEBEB; } .cl-5 .cluster-region { color: #A32D2D; } .cl-5 .cluster-name { color: #501313; } .cl-5 .cluster-sub { color: #A32D2D; }
+.cl-6 .cluster-head { background: #EAF3DE; } .cl-6 .cluster-region { color: #3B6D11; } .cl-6 .cluster-name { color: #173404; } .cl-6 .cluster-sub { color: #3B6D11; }
+
+/* ── PLATFORM CARD ─────────────────────────────────────── */
+.plat-card {
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background: var(--card);
+  transition: all var(--transition);
+}
+.plat-card:hover { background: var(--card-hover); box-shadow: var(--shadow); border-color: var(--border-med); }
+.plat-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
+.plat-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+.plat-type { font-size: 10.5px; font-weight: 500; padding: 3px 10px; border-radius: 99px; }
+.pt-platform { background: #EEEDFE; color: #3C3489; }
+.pt-direct { background: #E1F5EE; color: #085041; }
+.plat-desc { font-size: 12px; color: #6a5d48; line-height: 1.65; margin-bottom: 10px; }
+.plat-meta { display: flex; flex-wrap: wrap; gap: 14px; font-size: 11px; color: #8a7a62; }
+.plat-meta strong { color: var(--ink); font-weight: 600; }
+
+/* ── PRIORITY TABLE ─────────────────────────────────────── */
+.priority-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.priority-table th {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  text-align: left;
+  padding: 0 12px 10px 0;
+  border-bottom: 1px solid var(--border-med);
+}
+.priority-table td {
+  padding: 11px 12px 11px 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  color: #6a5d48;
+  line-height: 1.5;
+}
+.priority-table tr:last-child td { border-bottom: none; }
+.tdname { font-weight: 600; color: var(--ink); font-size: 13px; }
+.pill { display: inline-block; font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 99px; }
+.pill-now { background: #E1F5EE; color: #085041; }
+.pill-mid { background: #FAEEDA; color: #854F0B; }
+.pill-later { background: rgba(26,18,8,0.07); color: #444441; }
+
+/* ── MOAT BOX ─────────────────────────────────────── */
+.moat-box {
+  background: linear-gradient(135deg, #EEEDFE 0%, #e8e6fd 100%);
+  border: 1px solid rgba(127,119,221,0.25);
+  border-radius: var(--r-lg);
+  padding: 20px 26px;
+}
+.moat-title { font-size: 15px; font-weight: 600; color: #26215C; margin-bottom: 8px; }
+.moat-body { font-size: 13px; color: #3C3489; line-height: 1.75; }
+
+/* ── CHECK GRID ─────────────────────────────────────── */
+.check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.check-item { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #6a5d48; line-height: 1.5; }
+.check-icon {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #E1F5EE;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+  font-size: 9px; color: #085041; font-weight: 700;
+}
+
+/* ── COMP TIER ─────────────────────────────────────── */
+.tier-block {
+  border-radius: var(--r);
+  padding: 15px 18px;
+  margin-bottom: 12px;
+  border-left: 3px solid;
+}
+.tier-block.accessible { background: rgba(74,124,90,0.06); border-color: var(--sage); }
+.tier-block.premium { background: rgba(46,60,126,0.06); border-color: var(--indigo); }
+.tier-block.near { background: rgba(224,123,42,0.06); border-color: var(--saffron); }
+.tier-block.ultra { background: rgba(196,94,53,0.06); border-color: var(--terracotta); }
+.tier-block-head {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.tier-block-brands { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+.tier-block-note { font-size: 12px; color: #6a5d48; line-height: 1.6; }
+
+/* ── GAP BADGES ─────────────────────────────────────── */
+.gap-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 9px 14px;
+  margin: 4px 4px 4px 0;
+  transition: all var(--transition);
+}
+.gap-badge:hover { border-color: var(--border-med); background: var(--card-hover); }
+.gap-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── INSIGHT ROW (market gaps) ─────────────────────────────────────── */
+.insight-row {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.insight-row:last-child { border-bottom: none; }
+.insight-icon {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0; margin-top: 1px;
+}
+.insight-row-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.insight-row-text { font-size: 12px; color: #6a5d48; line-height: 1.65; }
+
+/* ── COMP MAP ─────────────────────────────────────── */
+.price-map { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 20px 22px; background: var(--card); margin-bottom: 18px; }
+.price-axis { display: flex; justify-content: space-between; font-size: 10px; color: #8a7a62; margin-bottom: 12px; }
+.comp-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+.comp-lbl { font-size: 12px; color: #6a5d48; width: 130px; flex-shrink: 0; }
+.comp-bar-wrap { flex: 1; height: 24px; background: rgba(201,150,58,0.07); border-radius: 4px; overflow: hidden; }
+.comp-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 11px; font-weight: 500; }
+.elar-zone {
+  background: #EEEDFE;
+  border: 1.5px dashed rgba(127,119,221,0.5);
+  border-radius: var(--r);
+  padding: 10px 16px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #3C3489;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ── SALE TABLE ─────────────────────────────────────── */
+.sale-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.sale-row:last-child { border-bottom: none; }
+
+/* ── SECTION INTRO QUOTE ─────────────────────────────────────── */
+.section-intro {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-style: italic;
+  color: #8a7a62;
+  margin-bottom: 28px;
+  line-height: 1.65;
+  max-width: 680px;
+  padding-left: 18px;
+  border-left: 2px solid var(--border-strong);
+}
+
+/* ── CRAFT ITEM ─────────────────────────────────────── */
+.craft-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(240,233,220,0.4);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  transition: background var(--transition);
+}
+.craft-item:hover { background: rgba(201,150,58,0.07); }
+.craft-brand { font-weight: 600; color: var(--ink); }
+
+/* PILLAR CARDS */
+.pillar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pillar { border-radius: var(--r-lg); padding: 16px 18px; }
+.p-purple { background: #EEEDFE; } .p-purple .pillar-title { color: #3C3489; } .p-purple .pillar-text { color: #534AB7; }
+.p-teal { background: #E1F5EE; } .p-teal .pillar-title { color: #085041; } .p-teal .pillar-text { color: #0F6E56; }
+.p-coral { background: #FAECE7; } .p-coral .pillar-title { color: #993C1D; } .p-coral .pillar-text { color: #D85A30; }
+.p-amber { background: #FAEEDA; } .p-amber .pillar-title { color: #854F0B; } .p-amber .pillar-text { color: #BA7517; }
+.pillar-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.pillar-text { font-size: 12px; line-height: 1.65; }
+
+/* COMP CARDS */
+.comp-card {
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+  background: var(--card);
+  transition: all var(--transition);
+}
+.comp-card:hover { box-shadow: var(--shadow); border-color: var(--border-med); }
+.comp-name { font-size: 13px; font-weight: 600; margin-bottom: 5px; color: var(--ink); }
+.comp-desc { font-size: 12px; color: #6a5d48; line-height: 1.55; margin-bottom: 10px; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+/* ── DOCUMENTS SECTION ─────────────────────────────────────── */
+.docs-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+  gap: 14px;
+}
+.docs-empty-icon {
+  width: 64px; height: 64px;
+  border-radius: 16px;
+  background: rgba(201,150,58,0.08);
+  border: 1px solid var(--border-med);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+}
+.docs-empty-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--ink);
+}
+.docs-empty-sub {
+  font-size: 13px;
+  color: #9a8870;
+  max-width: 340px;
+  line-height: 1.65;
+}
+
+.add-doc-form {
+  background: var(--card);
+  border: 1px solid var(--border-med);
+  border-radius: var(--r-lg);
+  padding: 22px 26px;
+  margin-bottom: 28px;
+}
+.add-doc-form-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.add-doc-form-sub {
+  font-size: 12px;
+  color: #9a8870;
+  margin-bottom: 18px;
+  line-height: 1.6;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.form-field label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+.form-field input,
+.form-field select,
+.form-field textarea {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  background: rgba(248,244,237,0.9);
+  border: 1px solid var(--border-med);
+  border-radius: var(--r);
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color var(--transition);
+  resize: none;
+}
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: var(--gold);
+  background: var(--cream);
+}
+.form-field input::placeholder,
+.form-field textarea::placeholder { color: #bfb09a; }
+.form-full { grid-column: 1 / -1; }
+.form-actions { display: flex; gap: 10px; margin-top: 14px; align-items: center; }
+.btn-primary {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 20px;
+  border-radius: var(--r);
+  border: none;
+  background: var(--gold);
+  color: var(--cream);
+  cursor: pointer;
+  transition: all var(--transition);
+  letter-spacing: 0.02em;
+}
+.btn-primary:hover { background: var(--gold-dim); }
+.btn-secondary {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 9px 18px;
+  border-radius: var(--r);
+  border: 1px solid var(--border-med);
+  background: transparent;
+  color: #8a7a62;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.btn-secondary:hover { background: rgba(201,150,58,0.06); color: var(--ink); }
+.form-hint { font-size: 11px; color: #a8977c; line-height: 1.55; }
+
+/* DOC TYPE COLORS */
+.type-doc    { --dt-bg: #E6F1FB; --dt-c: #185FA5; }
+.type-sheet  { --dt-bg: #E1F5EE; --dt-c: #085041; }
+.type-slides { --dt-bg: #FAEEDA; --dt-c: #854F0B; }
+.type-pdf    { --dt-bg: #FAECE7; --dt-c: #993C1D; }
+.type-other  { --dt-bg: rgba(26,18,8,0.06); --dt-c: #4a3e2e; }
+
+/* DOCUMENT CARD */
+.doc-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-bottom: 20px;
+  transition: box-shadow var(--transition), border-color var(--transition);
+}
+.doc-card:hover { box-shadow: var(--shadow-hover); border-color: var(--border-med); }
+
+.doc-card-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.doc-header-left { display: flex; align-items: flex-start; gap: 12px; flex: 1; min-width: 0; }
+.doc-type-icon {
+  width: 38px; height: 38px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  background: var(--dt-bg);
+}
+.doc-title-area { flex: 1; min-width: 0; }
+.doc-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.doc-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.doc-type-badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: var(--dt-bg);
+  color: var(--dt-c);
+}
+.doc-desc-text {
+  font-size: 12px;
+  color: #8a7a62;
+}
+.doc-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.doc-action-btn {
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: var(--r);
+  border: 1px solid var(--border-med);
+  background: transparent;
+  color: #8a7a62;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+.doc-action-btn:hover { background: rgba(201,150,58,0.08); color: var(--ink); border-color: var(--border-strong); }
+.doc-action-btn.danger:hover { background: rgba(163,45,45,0.07); color: #A32D2D; border-color: rgba(163,45,45,0.25); }
+.doc-action-btn.primary-action {
+  background: rgba(201,150,58,0.1);
+  color: var(--gold-dim);
+  border-color: var(--border-med);
+  font-weight: 600;
+}
+.doc-action-btn.primary-action:hover { background: var(--gold); color: var(--cream); border-color: var(--gold); }
+
+/* PREVIEW AREA */
+.doc-preview-area {
+  position: relative;
+}
+.doc-preview-bar {
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(240,233,220,0.35);
+  border-bottom: 1px solid var(--border);
+}
+.doc-preview-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+.preview-size-btns {
+  display: flex;
+  gap: 4px;
+}
+.size-btn {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: #8a7a62;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: 'Outfit', sans-serif;
+}
+.size-btn.active, .size-btn:hover { background: var(--card); color: var(--ink); border-color: var(--border-med); }
+
+.doc-iframe-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #f5f0e8;
+  transition: height 0.3s ease;
+}
+.doc-iframe-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+.doc-iframe-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(248,244,237,0.95);
+  font-size: 13px;
+  color: #9a8870;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.loading-spinner {
+  width: 28px; height: 28px;
+  border: 2px solid var(--border-med);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.doc-preview-collapsed {
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(240,233,220,0.2);
+}
+.collapsed-hint { font-size: 12px; color: #9a8870; font-style: italic; }
+
+/* DOCS GRID HEADER */
+.docs-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+.docs-section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--ink);
+}
+.docs-section-count {
+  font-size: 12px;
+  color: #9a8870;
+  margin-top: 2px;
+}
+.btn-add-doc {
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--r);
+  border: 1px solid var(--border-med);
+  background: rgba(201,150,58,0.08);
+  color: var(--gold-dim);
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-add-doc:hover { background: var(--gold); color: var(--cream); border-color: var(--gold); }
+
+/* How-to banner */
+.howto-banner {
+  background: rgba(46,60,126,0.05);
+  border: 1px solid rgba(46,60,126,0.12);
+  border-radius: var(--r-lg);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.howto-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.howto-title { font-size: 13px; font-weight: 600; color: #2e3c7e; margin-bottom: 4px; }
+.howto-steps { font-size: 12px; color: #3a4e8a; line-height: 1.8; }
+.howto-steps ol { padding-left: 16px; }
+.howto-close { font-size: 16px; color: #8a9acc; cursor: pointer; flex-shrink: 0; margin-left: auto; line-height: 1; padding: 2px; }
+.howto-close:hover { color: #2e3c7e; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .sidebar { width: 200px; }
+  .main { margin-left: 200px; }
+  .content { padding: 28px 32px 60px; }
+  .page-header { padding: 24px 32px 20px; }
+  .grid-2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .header-stats { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-eyebrow">Brand Intelligence</div>
+    <div class="brand-name">The <em>Elar</em></div>
+    <div class="brand-tagline">Premium Indian fashion<br>for Gen Z · India launch</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Research</div>
+    <div class="nav-item active" data-panel="market" onclick="switchPanel('market')">
+      <div class="nav-icon">📊</div>
+      Market Brief
+    </div>
+    <div class="nav-item" data-panel="competitive" onclick="switchPanel('competitive')">
+      <div class="nav-icon">🏪</div>
+      Competitive Data
+    </div>
+  </div>
+
+  <div class="nav-section" style="margin-top:8px">
+    <div class="nav-section-label">Strategy</div>
+    <div class="nav-item" data-panel="brand" onclick="switchPanel('brand')">
+      <div class="nav-icon">✦</div>
+      Brand Story
+    </div>
+    <div class="nav-item" data-panel="pricing" onclick="switchPanel('pricing')">
+      <div class="nav-icon">₹</div>
+      Pricing Framework
+    </div>
+    <div class="nav-item" data-panel="sourcing" onclick="switchPanel('sourcing')">
+      <div class="nav-icon">🧵</div>
+      Textile Sourcing
+    </div>
+  </div>
+
+  <div class="nav-section" style="margin-top:8px">
+    <div class="nav-section-label">Documents</div>
+    <div class="nav-item" data-panel="documents" onclick="switchPanel('documents')">
+      <div class="nav-icon">📁</div>
+      <span>Drive Files</span>
+      <span id="doc-count-badge" style="margin-left:auto;background:rgba(201,150,58,0.15);color:var(--gold-dim);font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;display:none">0</span>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <strong>The Elar</strong> · Brand Intelligence Hub<br>
+    India Launch · Gen Z Luxury · 2025
+  </div>
+</aside>
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<div class="main">
+
+  <!-- DYNAMIC HEADER -->
+  <div class="page-header" id="page-header">
+    <div class="page-title-area">
+      <div class="page-eyebrow" id="hdr-eyebrow">Market Research</div>
+      <div class="page-title" id="hdr-title">Market <em>Brief</em></div>
+      <div class="page-subtitle" id="hdr-subtitle">India luxury fashion market · Gen Z opportunity analysis · 2025</div>
+    </div>
+    <div class="header-stats" id="hdr-stats">
+      <div class="hstat"><div class="hstat-val">$9.4B</div><div class="hstat-label">Market Size</div></div>
+      <div class="hstat"><div class="hstat-val">377M</div><div class="hstat-label">Gen Z India</div></div>
+      <div class="hstat"><div class="hstat-val">5–7%</div><div class="hstat-label">CAGR</div></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ════════════════ MARKET BRIEF ════════════════ -->
+    <div class="panel active" id="panel-market">
+
+      <!-- Market snapshot KPIs -->
+      <div class="kpi-grid" style="grid-template-columns: repeat(6, 1fr);">
+        <div class="kpi"><div class="kpi-label">Luxury Fashion 2024</div><div class="kpi-val">$9.4B</div><div class="kpi-sub">→ $15.1B by 2033</div></div>
+        <div class="kpi"><div class="kpi-label">CAGR</div><div class="kpi-val green">5–7%</div><div class="kpi-sub">Fastest in Asia-Pac</div></div>
+        <div class="kpi"><div class="kpi-label">India Gen Z</div><div class="kpi-val blue">377M</div><div class="kpi-sub">Largest globally</div></div>
+        <div class="kpi"><div class="kpi-label">Gen Z Spend 2025</div><div class="kpi-val amber">$30B+</div><div class="kpi-sub">This year alone</div></div>
+        <div class="kpi"><div class="kpi-label">Buyers Outside Metros</div><div class="kpi-val">89%</div><div class="kpi-sub">Tier 2 & 3 opp.</div></div>
+        <div class="kpi"><div class="kpi-label">Plan to Spend More</div><div class="kpi-val green">84%</div><div class="kpi-sub">Deloitte 2025</div></div>
+      </div>
+
+      <button class="ask-btn" onclick="sendPrompt('Give me a deeper breakdown of the India luxury fashion market size by segment and region')">Deeper market breakdown</button>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">Gen Z consumer psychology — what drives purchase</div>
+      <div class="grid-2">
+        <div>
+          <div class="insight">
+            <div class="insight-head">Quiet luxury over logomania</div>
+            <div class="insight-body">Indian Gen Z is shifting away from flashy branding toward well-cut, high-quality pieces in neutral tones. They want clothing that "whispers" prestige — tailored shirts, structured silhouettes, minimal but unmistakable quality signals.</div>
+          </div>
+          <div class="insight">
+            <div class="insight-head">Values-first purchasing</div>
+            <div class="insight-body">76% of fashion discovery among Gen Z is driven by social media, but they're highly skeptical of performative brands. They align with brands that demonstrate ethics, sustainability, and cultural authenticity.</div>
+          </div>
+        </div>
+        <div>
+          <div class="insight">
+            <div class="insight-head">Cultural fusion identity</div>
+            <div class="insight-body">India-specific: Gen Z wants brands that blend Indian craft heritage with global premium aesthetics. Sarees with sneakers, kurtas over jeans — this cohort is proud of its roots while demanding modernity.</div>
+          </div>
+          <div class="insight">
+            <div class="insight-head">Mobile-first discovery, in-store desire</div>
+            <div class="insight-body">70% discover luxury via mobile/online, but 52% of high-income shoppers now prefer in-store purchases (up from 36% in 2023). They discover digitally and want a tactile, experiential offline moment.</div>
+          </div>
+        </div>
+      </div>
+      <button class="ask-btn" onclick="sendPrompt('How should The Elar brand story speak to Indian Gen Z values and cultural identity?')">Build The Elar's brand voice</button>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">Competitive landscape</div>
+      <div class="grid-2">
+        <div class="comp-card">
+          <div class="comp-name">Global luxury — LVMH, Gucci, Balenciaga</div>
+          <div class="comp-desc">Entering India via Reliance Retail tie-ups. Strong aspirational pull but culturally distant by Gen Z. Price point far out of range for most 16–24s.</div>
+          <span class="tag tc">Indirect competitor</span><span class="tag ta">Aspirational benchmark</span>
+        </div>
+        <div class="comp-card">
+          <div class="comp-name">Sabyasachi / Manish Malhotra</div>
+          <div class="comp-desc">Established Indian luxury, strong wedding/occasion market. Skews older, heavy traditional focus. Less relevant to everyday premium Gen Z dressing.</div>
+          <span class="tag tc">Indirect competitor</span><span class="tag tb">Occasion overlap</span>
+        </div>
+        <div class="comp-card">
+          <div class="comp-name">Snitch / Bewakoof / Souled Store</div>
+          <div class="comp-desc">D2C Gen Z brands — fast fashion speed, high digital fluency, strong social presence. Not luxury, but they own Gen Z mindshare at accessible price points.</div>
+          <span class="tag tg">Watch closely</span><span class="tag ta">Mindshare competitor</span>
+        </div>
+        <div class="comp-card">
+          <div class="comp-name">Galeries Lafayette / Ami Paris / Jacquemus</div>
+          <div class="comp-desc">New Mumbai entry targeting younger luxury shoppers. Buzzy global labels entering India now. Sets benchmark for what Gen Z-accessible luxury looks like.</div>
+          <span class="tag tp">Direct competitor</span><span class="tag tb">Positioning reference</span>
+        </div>
+      </div>
+      <button class="ask-btn" onclick="sendPrompt('Where is The Elar\'s gap in the competitive landscape — what positioning should we own?')">Find The Elar's positioning gap</button>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">White space — where The Elar can win</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">
+        <div class="gap-badge"><span class="gap-dot" style="background:#534AB7"></span>No dominant Indian luxury brand owning Gen Z daily wear</div>
+        <div class="gap-badge"><span class="gap-dot" style="background:#0F6E56"></span>Cultural fusion premium (Indian craft + global silhouette)</div>
+        <div class="gap-badge"><span class="gap-dot" style="background:#D85A30"></span>Quiet luxury at accessible premium — not €1000 bags</div>
+        <div class="gap-badge"><span class="gap-dot" style="background:#BA7517"></span>Tier 2 & 3 city Gen Z underserved by premium labels</div>
+        <div class="gap-badge"><span class="gap-dot" style="background:#185FA5"></span>Digital-first brand with phygital experience moments</div>
+      </div>
+
+      <div class="sec-label">Four pillars for The Elar's strategy</div>
+      <div class="pillar-grid">
+        <div class="pillar p-purple"><div class="pillar-title">01 · Brand identity</div><div class="pillar-text">Position as "cultural luxury" — premium craft rooted in India, designed for how Gen Z actually lives. Not heritage, not streetwear. The in-between space nobody owns yet.</div></div>
+        <div class="pillar p-teal"><div class="pillar-title">02 · Product strategy</div><div class="pillar-text">Start with hero SKUs — limited drops, not broad catalogues. Focus on elevated basics and fusion pieces that travel from campus to occasion. Scarcity = premium perception.</div></div>
+        <div class="pillar p-coral"><div class="pillar-title">03 · Marketing & community</div><div class="pillar-text">Build via micro-influencers + creator co-drops. Gen Z trusts peers, not billboards. Instagram + Reels for discovery; exclusive drops and waitlists for loyalty.</div></div>
+        <div class="pillar p-amber"><div class="pillar-title">04 · Channel mix</div><div class="pillar-text">D2C website first for margins. Use Myntra for reach. Plan 1–2 experiential pop-ups in metro cities for the tactile in-store moment Gen Z increasingly craves.</div></div>
+      </div>
+      <button class="ask-btn" onclick="sendPrompt('Help me build a 12-month go-to-market plan for The Elar based on these four pillars')">Build the 12-month GTM plan</button>
+
+    </div>
+
+    <!-- ════════════════ COMPETITIVE DATA ════════════════ -->
+    <div class="panel" id="panel-competitive">
+      <div class="sub-nav">
+        <button class="sub-tab active" onclick="switchSubTab(this,'comp-overview')">Overview</button>
+        <button class="sub-tab" onclick="switchSubTab(this,'comp-pricing')">Pricing Tiers</button>
+        <button class="sub-tab" onclick="switchSubTab(this,'comp-craft')">Craft & Material</button>
+        <button class="sub-tab" onclick="switchSubTab(this,'comp-products')">Product Mix</button>
+        <button class="sub-tab" onclick="switchSubTab(this,'comp-gaps')">Market Gaps</button>
+      </div>
+
+      <div class="sub-panel active" id="comp-overview">
+        <div class="kpi-grid" style="grid-template-columns: repeat(4,1fr)">
+          <div class="kpi"><div class="kpi-label">Unique Products</div><div class="kpi-val">2,861</div><div class="kpi-sub">across 15 brands</div></div>
+          <div class="kpi"><div class="kpi-label">Total Variants</div><div class="kpi-val">18,513</div><div class="kpi-sub">size × colour combos</div></div>
+          <div class="kpi"><div class="kpi-label">In Stock</div><div class="kpi-val green">81%</div><div class="kpi-sub">14,993 available</div></div>
+          <div class="kpi"><div class="kpi-label">On Sale</div><div class="kpi-val amber">8.3%</div><div class="kpi-sub">1,545 discounted</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card"><div class="card-heading">Variants by Brand</div><div id="brand-variants-bars"></div></div>
+          <div class="card"><div class="card-heading">Unique Products by Brand</div><div id="unique-products-bars"></div></div>
+        </div>
+      </div>
+
+      <div class="sub-panel" id="comp-pricing" style="display:none">
+        <div class="kpi-grid" style="grid-template-columns: repeat(4,1fr)">
+          <div class="kpi"><div class="kpi-label">Lowest Median</div><div class="kpi-val green">₹3,500</div><div class="kpi-sub">Bunaai</div></div>
+          <div class="kpi"><div class="kpi-label">Highest Median</div><div class="kpi-val red">₹1.99L</div><div class="kpi-sub">Rahul Mishra</div></div>
+          <div class="kpi"><div class="kpi-label">Price Spread</div><div class="kpi-val blue">57×</div><div class="kpi-sub">Bunaai → Rahul Mishra</div></div>
+          <div class="kpi"><div class="kpi-label">Mid-Market Median</div><div class="kpi-val amber">₹24,500</div><div class="kpi-sub">Kanika Goyal</div></div>
+        </div>
+        <div class="card" style="margin-bottom:18px"><div class="card-heading">Median Price Positioning (INR)</div><div id="price-positioning-bars"></div>
+          <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;font-size:11px;color:#8a7a62">
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#4a7c5a;display:inline-block"></span>Accessible &lt;₹10k</span>
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#2e3c7e;display:inline-block"></span>Premium ₹10k–50k</span>
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#e07b2a;display:inline-block"></span>Near-Luxury ₹50k–1L</span>
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#c45e35;display:inline-block"></span>Ultra ₹1L+</span>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card"><div class="card-heading">Price Tier Distribution</div><div id="price-tier-bars"></div></div>
+          <div class="card"><div class="card-heading">Sale % & Out-of-Stock % by Brand</div><div id="sale-oos-table"></div></div>
+        </div>
+      </div>
+
+      <div class="sub-panel" id="comp-craft" style="display:none">
+        <div class="kpi-grid" style="grid-template-columns: repeat(3,1fr)">
+          <div class="kpi"><div class="kpi-label">Craft Data Coverage</div><div class="kpi-val">100%</div><div class="kpi-sub">all 18,513 rows tagged</div></div>
+          <div class="kpi"><div class="kpi-label">Dominant Craft</div><div class="kpi-val" style="font-size:22px">Embroidery</div><div class="kpi-sub">present in 13/15 brands</div></div>
+          <div class="kpi"><div class="kpi-label">Dominant Material</div><div class="kpi-val" style="font-size:22px">Cotton</div><div class="kpi-sub">3,037 variants</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card"><div class="card-heading">Top Crafts Across All Brands</div><div id="craft-bars"></div></div>
+          <div class="card"><div class="card-heading">Top Materials</div><div id="material-bars"></div></div>
+        </div>
+        <div class="card"><div class="card-heading">Brand Craft Signature — Primary Technique</div><div id="craft-sig-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px"></div></div>
+      </div>
+
+      <div class="sub-panel" id="comp-products" style="display:none">
+        <div class="grid-2">
+          <div class="card"><div class="card-heading">Top Product Types</div><div id="product-type-bars"></div></div>
+          <div class="card"><div class="card-heading">Size Range Diversity by Brand</div><div id="size-diversity-bars"></div><div style="font-size:11px;color:#a8977c;margin-top:10px;font-style:italic">Higher = more inclusive sizing</div></div>
+        </div>
+      </div>
+
+      <div class="sub-panel" id="comp-gaps" style="display:none">
+        <p class="section-intro">Key observations for positioning a new brand — based on what the data reveals is missing across the 15-brand competitive set.</p>
+        <div class="card" style="margin-bottom:18px">
+          <div class="card-heading">Pricing White Space</div>
+          <div class="tier-block accessible">
+            <div class="tier-block-head">₹0 – ₹10,000 — Accessible <span style="font-size:12px;font-weight:400;color:#4a7c5a">(2 brands only)</span></div>
+            <div class="tier-block-brands"><span class="tag ts">Bunaai ₹3.5k</span><span class="tag ts">Sui ₹7.3k</span></div>
+            <div class="tier-block-note">Large market, very few Indian craft brands here. Bunaai owns this space almost alone — significant white space for anyone who can marry craft quality with accessible pricing.</div>
+          </div>
+          <div class="tier-block premium">
+            <div class="tier-block-head">₹10,000 – ₹50,000 — Premium Sweet Spot <span style="font-size:12px;font-weight:400;color:#2e3c7e">(6 brands)</span></div>
+            <div class="tier-block-brands"><span class="tag tb">Indian Summer Co ₹10k</span><span class="tag tb">QUOD ₹15k</span><span class="tag tb">Diksha Khanna ₹16.5k</span><span class="tag tb">Kanika Goyal ₹24.5k</span><span class="tag tb">HARAGO ₹25k</span><span class="tag tb">Dhruv Kapoor ₹32k</span></div>
+            <div class="tier-block-note">Most competitive tier. Six brands fighting for the same premium Indian consumer — differentiation on craft, occasion, or sizing is essential here.</div>
+          </div>
+          <div class="tier-block near">
+            <div class="tier-block-head">₹38,000 – ₹1,00,000 — Near-Luxury Gap <span style="font-size:12px;font-weight:400;color:#8a4e10">(thin coverage)</span></div>
+            <div class="tier-block-brands"><span class="tag ta">Injiri ₹38k</span><span class="tag ta">Kartik Research ₹48k</span></div>
+            <div class="tier-block-note">Deliberately thin coverage. The space between premium and couture is genuinely underserved — a brand here faces little direct competition.</div>
+          </div>
+          <div class="tier-block ultra">
+            <div class="tier-block-head">₹1,00,000+ — Couture / Ultra <span style="font-size:12px;font-weight:400;color:#8a2e10">(established)</span></div>
+            <div class="tier-block-brands"><span class="tag tc">Rimzim Dadu ₹1.6L</span><span class="tag tc">Gaurav Gupta ₹1.95L</span><span class="tag tc">Rahul Mishra ₹2L</span></div>
+            <div class="tier-block-note">Established couture players with deep brand equity. Difficult to enter without significant runway investment and reputation-building.</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-heading">Strategic Gaps for a New Brand</div>
+          <div id="gaps-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════ BRAND STORY ════════════════ -->
+    <div class="panel" id="panel-brand">
+      <div class="sec-label">The core truth — what The Elar stands for</div>
+      <div class="truth-box">
+        <div class="truth-headline">"You are not between two worlds. You are the world where two meet."</div>
+        <div class="truth-body">Indian Gen Z doesn't experience a conflict between their heritage and their ambition. They live both, simultaneously. The Elar is for people who wear a linen kurta to a board meeting and feel completely themselves. The brand's core truth: <strong>cultural fluency is the new luxury.</strong> Premium doesn't mean Western. Luxury doesn't mean imported. The most sophisticated thing a person can wear is clothing that knows exactly who they are.</div>
+      </div>
+      <button class="ask-btn" onclick="sendPrompt('What are some specific brand messaging examples The Elar could use across different cultural moments in India?')">Generate cultural moment messaging</button>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">The tension The Elar resolves</div>
+      <div class="tension-grid">
+        <div class="tension-card tc-left">
+          <div class="tc-label">What Indian Gen Z feels</div>
+          <div class="tc-text">Pride in their roots. Excitement for the global. Tired of choosing between them. Frustrated that "luxury" still means Paris, Milan, or traditional Indian wedding wear — nothing in between.</div>
+        </div>
+        <div class="tension-card tc-right">
+          <div class="tc-label">What The Elar offers</div>
+          <div class="tc-text">A brand that lives permanently in the in-between. Elevated Indian craft made into clothes for how you actually live — not for a wedding stage or a runway. Luxury, on their terms.</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">Four Gen Z personas The Elar speaks to</div>
+      <div class="persona" onclick="sendPrompt('Build a detailed marketing brief for The Elar targeting the Culturally Proud persona')">
+        <div class="persona-avatar av-1">CP</div>
+        <div>
+          <div class="persona-name">The Culturally Proud</div>
+          <div class="persona-desc">21, Delhi or Jaipur. Wears handloom and knows the weave origin. Follows Indian craft accounts, not just fashion ones. Wants premium Indianness — not kitsch, not costume.</div>
+          <div><span class="tag tp">Handloom-curious</span><span class="tag tp">Craft storytelling</span><span class="tag tp">Anti-fast fashion</span></div>
+        </div>
+      </div>
+      <div class="persona" onclick="sendPrompt('Build a detailed marketing brief for The Elar targeting the Quiet Achiever persona')">
+        <div class="persona-avatar av-2">QA</div>
+        <div>
+          <div class="persona-name">The Quiet Achiever</div>
+          <div class="persona-desc">22, Mumbai or Bengaluru. Internship at a startup, subtly ambitious. Allergic to logos. Drawn to minimal, structured pieces that signal taste without trying too hard.</div>
+          <div><span class="tag ts">Quiet luxury</span><span class="tag ts">Everyday premium</span><span class="tag ts">Office-to-evening</span></div>
+        </div>
+      </div>
+      <div class="persona" onclick="sendPrompt('Build a detailed marketing brief for The Elar targeting the Festival Fusionist persona')">
+        <div class="persona-avatar av-3">FF</div>
+        <div>
+          <div class="persona-name">The Festival Fusionist</div>
+          <div class="persona-desc">19, Pune or Hyderabad. Dresses for Diwali in a way that's Instagram-worthy but not overdone. Loves the fusion moment — saree drape with a blazer, kurta over cargo pants.</div>
+          <div><span class="tag ta">Indo-western fusion</span><span class="tag ta">Occasion wear</span><span class="tag ta">Camera-ready</span></div>
+        </div>
+      </div>
+      <div class="persona" onclick="sendPrompt('Build a detailed marketing brief for The Elar targeting the Tier 2 Aspirant persona')">
+        <div class="persona-avatar av-4">TA</div>
+        <div>
+          <div class="persona-name">The Tier 2 Aspirant</div>
+          <div class="persona-desc">20, Indore, Surat, or Lucknow. Sharp, style-conscious, underserved by premium labels. Wants a brand that doesn't feel made for Delhi South only.</div>
+          <div><span class="tag tc">Regional pride</span><span class="tag tc">D2C discovery</span><span class="tag tc">Accessible premium</span></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">Brand voice — how The Elar speaks</div>
+      <div class="voice-grid">
+        <div class="voice-card vc-1"><div class="vc-title">Assured, not arrogant</div><div class="vc-body">Never condescending. The Elar doesn't tell you what's stylish — it trusts you already know. Speaks like a peer who happens to have remarkable taste.</div></div>
+        <div class="voice-card vc-2"><div class="vc-title">Rooted, not nostalgic</div><div class="vc-body">Indian craft is a living present, not a museum exhibit. Never romanticises the past — it brings craft into today's story without "heritage brand" energy.</div></div>
+        <div class="voice-card vc-3"><div class="vc-title">Minimal, not cold</div><div class="vc-body">Spare language. No overwriting. But always warm — there is a human soul behind every line. Quiet confidence, not clinical minimalism.</div></div>
+        <div class="voice-card vc-4"><div class="vc-title">Story-led, not product-led</div><div class="vc-body">Never lead with "Buy now." Always lead with the person, the moment, the feeling. The product earns its place by being part of a bigger narrative.</div></div>
+      </div>
+      <button class="ask-btn" onclick="sendPrompt('Write 5 sample Instagram captions for The Elar that demonstrate this brand voice')">Generate sample captions</button>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">The brand narrative arc</div>
+      <div class="arc-step"><div class="arc-num">1</div><div><div class="arc-title">Start with the cultural insight</div><div class="arc-body">India's Gen Z is the first generation that doesn't have to choose between being Indian and being global. They are both, fluently. No generation before them could say that.</div></div></div>
+      <div class="arc-step"><div class="arc-num">2</div><div><div class="arc-title">Name the gap</div><div class="arc-body">But fashion hasn't caught up. Luxury still speaks in French. "Indian" still means occasion wear. There's no brand built for how this generation actually lives, dresses, and moves through the world every day.</div></div></div>
+      <div class="arc-step"><div class="arc-num">3</div><div><div class="arc-title">Introduce The Elar as the answer</div><div class="arc-body">The Elar is built for the in-between — premium pieces that carry the soul of Indian craft into everyday life. Not traditional. Not Western. Fluently both.</div></div></div>
+      <div class="arc-step"><div class="arc-num">4</div><div><div class="arc-title">Make the customer the hero</div><div class="arc-body">The Elar's story isn't about the brand — it's about the person wearing it. Every campaign, every caption, every drop centres on the wearer's identity, not the brand's ego.</div></div></div>
+      <div class="arc-step"><div class="arc-num">5</div><div><div class="arc-title">Earn trust through craft transparency</div><div class="arc-body">Show the textile origin. Name the weaver cluster. Tell the story of the fabric before it became the garment. Gen Z doesn't just buy clothes — they buy stories they can share.</div></div></div>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">Sample brand language — how this sounds in practice</div>
+      <div class="copy-block"><div class="copy-context">Brand manifesto — opening line</div><div class="copy-text">You grew up with both. The smell of haldi at the doorstep and the ping of a drop notification. The music of the azaan and the beat of your playlist. You were never between two worlds — you were always the place where they meet. So was The Elar.</div></div>
+      <div class="copy-block"><div class="copy-context">Product description — linen shirt</div><div class="copy-text">Woven in Bhagalpur. Cut for a 9am meeting and a 9pm terrace. The kind of shirt that doesn't announce itself — it just stays when everything else feels like too much.</div></div>
+      <div class="copy-block"><div class="copy-context">Campaign line — festive drop</div><div class="copy-text">Diwali doesn't need a costume. Wear what you are.</div></div>
+      <div class="copy-block"><div class="copy-context">Instagram bio</div><div class="copy-text">For the ones who were always both. Premium Indian clothing, made for the everyday.</div></div>
+      <button class="ask-btn" onclick="sendPrompt('Write a complete brand manifesto for The Elar — 200 words — that can be used on the About page and in brand decks')">Write the full brand manifesto</button>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">What The Elar must never do</div>
+      <div class="avoid-row"><div class="avoid-icon">✕</div><div class="avoid-text"><strong>Never romanticise poverty or artisan struggle</strong> — "saving the weaver" narratives feel patronising and performative. Tell the craft story with pride, not pity.</div></div>
+      <div class="avoid-row"><div class="avoid-icon">✕</div><div class="avoid-text"><strong>Never use "timeless" or "heritage" as your primary hook</strong> — these feel like legacy brand language. The Elar is forward-facing, not a museum curator.</div></div>
+      <div class="avoid-row"><div class="avoid-icon">✕</div><div class="avoid-text"><strong>Never speak down to Tier 2 customers</strong> — no "now available across India" language implying Metro-first thinking. The brand exists for everyone simultaneously.</div></div>
+      <div class="avoid-row"><div class="avoid-icon">✕</div><div class="avoid-text"><strong>Never imitate global luxury aesthetic wholesale</strong> — a beige Euro-minimal brand identity undermines the cultural identity claim. Visual language should feel Indian-premium, not trying-to-be-Parisian.</div></div>
+      <div class="avoid-row"><div class="avoid-icon">✕</div><div class="avoid-text"><strong>Never chase every trend</strong> — Gen Z trusts brands with a consistent point of view far more than brands that react to every Reel trend.</div></div>
+
+    </div>
+
+    <!-- ════════════════ PRICING ════════════════ -->
+    <div class="panel" id="panel-pricing">
+
+      <div class="sec-label">Where The Elar sits — price positioning map</div>
+      <div class="price-map">
+        <div class="price-axis"><span>₹500</span><span>₹2,000</span><span>₹5,000</span><span>₹15,000</span><span>₹50,000+</span></div>
+        <div class="comp-row"><span class="comp-lbl">Bonkers Corner</span><div class="comp-bar-wrap"><div class="comp-bar" style="width:18%;background:#D3D1C7;color:#444;">₹999–2K</div></div></div>
+        <div class="comp-row"><span class="comp-lbl">Snitch / WTF</span><div class="comp-bar-wrap"><div class="comp-bar" style="width:22%;background:#D3D1C7;color:#444;">₹800–3K</div></div></div>
+        <div class="comp-row"><span class="comp-lbl">Almost Gods</span><div class="comp-bar-wrap"><div class="comp-bar" style="width:28%;background:#B5D4F4;color:#185FA5;">₹3K–8K</div></div></div>
+        <div class="comp-row"><span class="comp-lbl">Fabindia (pret)</span><div class="comp-bar-wrap"><div class="comp-bar" style="width:20%;background:#C0DD97;color:#3B6D11;">₹1.5K–5K</div></div></div>
+        <div class="comp-row"><span class="comp-lbl">Raw Mango</span><div class="comp-bar-wrap"><div class="comp-bar" style="width:40%;background:#FAC775;color:#633806;">₹5K–18K</div></div></div>
+        <div class="comp-row"><span class="comp-lbl">Sabyasachi (pret)</span><div class="comp-bar-wrap"><div class="comp-bar" style="width:70%;background:#F5C4B3;color:#993C1D;">₹15K–1.5L</div></div></div>
+        <div class="comp-row"><span class="comp-lbl">Intl luxury (India)</span><div class="comp-bar-wrap"><div class="comp-bar" style="width:90%;background:#E24B4A;color:#fff;">₹30K–5L+</div></div></div>
+        <div class="elar-zone">✦ The Elar's sweet spot — ₹2,500 to ₹12,000 — no strong homegrown premium brand owns this space for Gen Z daily wear</div>
+      </div>
+      <button class="ask-btn" onclick="sendPrompt('How should The Elar price its hero launch SKUs specifically — give me a first collection pricing plan')">Price The Elar's first collection</button>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">The four-tier price architecture</div>
+      <div class="tier-card t-entry">
+        <div class="tier-head"><div><div class="tier-name">Tier 1 — Entry / Gateway</div><div class="tier-price">₹1,500 – ₹3,000</div><div class="tier-price-sub">~20% of catalogue · highest volume · lowest margin</div></div><span class="tier-badge">Gateway</span></div>
+        <div class="tier-body"><div class="tier-desc">The first purchase. Designed to convert a follower into a customer with minimal financial risk. Think accessories, scarves, tote bags, basic tees with craft detailing.</div><div class="sku-tags"><span class="tag tn">Block-print tote</span><span class="tag tn">Craft hair accessory</span><span class="tag tn">Printed tee (base)</span><span class="tag tn">Pocket square</span></div></div>
+      </div>
+      <div class="tier-card t-core">
+        <div class="tier-head"><div><div class="tier-name">Tier 2 — Core Collection</div><div class="tier-price">₹3,000 – ₹6,500</div><div class="tier-price-sub">~50% of catalogue · bread and butter · target 55–65% gross margin</div></div><span class="tier-badge">Core</span></div>
+        <div class="tier-body"><div class="tier-desc">The heart of The Elar. Everyday premium pieces — linen shirts, structured co-ords, elevated kurtas, fusion trousers. This is where brand loyalty is built. Half your SKU count, most of your revenue.</div><div class="sku-tags"><span class="tag tp">Linen / handloom shirts</span><span class="tag tp">Structured co-ord sets</span><span class="tag tp">Elevated kurtas</span><span class="tag tp">Premium trousers</span><span class="tag tp">Fusion jackets</span></div></div>
+      </div>
+      <div class="tier-card t-sig">
+        <div class="tier-head"><div><div class="tier-name">Tier 3 — Signature Line</div><div class="tier-price">₹6,500 – ₹12,000</div><div class="tier-price-sub">~20% of catalogue · halo pieces · highest margin potential</div></div><span class="tier-badge">Signature</span></div>
+        <div class="tier-body"><div class="tier-desc">The aspiration anchor. These are the pieces photographed for campaigns, worn by creators. They justify the brand's premium claim — hand-embroidered detail, heritage textile, meticulous cut.</div><div class="sku-tags"><span class="tag ta">Embroidered outerwear</span><span class="tag ta">Heritage textile sets</span><span class="tag ta">Statement blazers</span><span class="tag ta">Artisan occasion wear</span></div></div>
+      </div>
+      <div class="tier-card t-ltd">
+        <div class="tier-head"><div><div class="tier-name">Tier 4 — Limited Drops</div><div class="tier-price">₹8,000 – ₹18,000</div><div class="tier-price-sub">~10% of catalogue · seasonal scarcity · builds cultural cachet</div></div><span class="tier-badge">Limited</span></div>
+        <div class="tier-body"><div class="tier-desc">Drops, not collections. 8–12 pieces maximum per drop, 1–2 times per year. Collaboration moments, cultural celebration pieces (Diwali, harvest festivals). Waitlists, countdown timers, community previews.</div><div class="sku-tags"><span class="tag tc">Festive capsule drops</span><span class="tag tc">Artisan collab pieces</span><span class="tag tc">Numbered editions</span><span class="tag tc">Creator co-design</span></div></div>
+      </div>
+      <button class="ask-btn" onclick="sendPrompt('What should The Elar\'s first limited drop look like — theme, SKU count, rollout strategy?')">Design the first drop</button>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">Margin architecture</div>
+      <div class="card" style="margin-bottom:18px">
+        <table class="data-table">
+          <thead><tr><th>Tier</th><th>Sell Price</th><th>Target COGS</th><th>Gross Margin (D2C)</th><th>Gross Margin (Marketplace)</th><th>Priority Metric</th></tr></thead>
+          <tbody>
+            <tr><td class="val">Tier 1 · Gateway</td><td>₹1,500–3,000</td><td>₹500–900</td><td class="warn">45–55%</td><td class="warn">30–40%</td><td>Volume + trial conversion</td></tr>
+            <tr><td class="val">Tier 2 · Core</td><td>₹3,000–6,500</td><td>₹900–2,000</td><td class="good">58–65%</td><td class="warn">40–50%</td><td>Repeat purchase + LTV</td></tr>
+            <tr><td class="val">Tier 3 · Signature</td><td>₹6,500–12,000</td><td>₹1,800–3,500</td><td class="good">62–70%</td><td class="good">48–58%</td><td>Brand perception + PR</td></tr>
+            <tr><td class="val">Tier 4 · Limited</td><td>₹8,000–18,000</td><td>₹2,500–5,000</td><td class="good">65–72%</td><td>Not listed (D2C only)</td><td>Cultural moment + press</td></tr>
+          </tbody>
+        </table>
+        <div style="font-size:12px;color:#8a7a62;margin-top:12px;line-height:1.65">COGS includes fabric, manufacturing, packaging, and logistics but excludes marketing and CAC. Target overall blended gross margin of 58–62% at D2C maturity.</div>
+      </div>
+
+      <div class="sec-label">Channel pricing strategy</div>
+      <div class="grid-3">
+        <div class="ch-card ch-d2c"><div class="ch-name">D2C website</div><div class="ch-price">Full price · best margin</div><div class="ch-note">Own the customer relationship. Offer early access, member pricing, and exclusive colourways here only. Target 60–70% of revenue here at maturity.</div></div>
+        <div class="ch-card ch-myntra"><div class="ch-name">Myntra / Ajio</div><div class="ch-price">+5–8% above D2C price</div><div class="ch-note">Slightly higher list price to offset 25–30% commission. Never cheaper than your own site. Tier 1 and 2 only — never signature or drops.</div></div>
+        <div class="ch-card ch-popup"><div class="ch-name">Pop-up / offline</div><div class="ch-price">Full price · premium experience</div><div class="ch-note">Never discount at pop-ups. Offer offline-exclusives — a colourway or bundle not available online — to drive foot traffic and justify the in-person moment.</div></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">Gen Z pricing psychology</div>
+      <div class="grid-2">
+        <div class="psy-card pc1"><div class="pc-title">Price transparency builds trust</div><div class="pc-body">Gen Z actively wants to know where their money goes. A simple breakdown — fabric, craft, packaging, fair maker wage — on your product page converts scepticism into pride. This is a proven conversion tactic.</div></div>
+        <div class="psy-card pc2"><div class="pc-title">Scarcity over sales</div><div class="pc-body">Never discount core and signature tiers. Gen Z reads a sale as a signal that nobody wanted it at full price. Run limited drops with waitlists instead — scarcity signals desirability far more powerfully.</div></div>
+        <div class="psy-card pc3"><div class="pc-title">Democratic luxury framing</div><div class="pc-body">The price must feel aspirational but achievable. ₹3,500 for a linen shirt feels reasonable when the story — Bhagalpur handloom, natural dye, 40 hours of making — is told. The story is what makes it worth it.</div></div>
+        <div class="psy-card pc4"><div class="pc-title">First-purchase friction removal</div><div class="pc-body">Free shipping above ₹2,000. 15-day no-questions returns. Easy size guide. These are the conversion rate. Gen Z will not buy online from a new brand without a safety net.</div></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">Non-negotiable pricing rules</div>
+      <ul class="rule-list">
+        <li class="rule-item"><span class="rule-dot" style="background:#534AB7"></span><span class="rule-text"><strong>No sitewide sales, ever.</strong> If you have overstock, do a private members-only archive sale — never a public discount banner.</span></li>
+        <li class="rule-item"><span class="rule-dot" style="background:#0F6E56"></span><span class="rule-text"><strong>D2C price is always the lowest available price.</strong> If a marketplace wants to discount — and they will — pull the listing.</span></li>
+        <li class="rule-item"><span class="rule-dot" style="background:#854F0B"></span><span class="rule-text"><strong>Price increases are allowed; decreases are not.</strong> Move prices up gradually (5–10% annually on core). Never drop prices on an existing SKU.</span></li>
+        <li class="rule-item"><span class="rule-dot" style="background:#993C1D"></span><span class="rule-text"><strong>Limited drops are D2C-exclusive and never restocked.</strong> If a drop sells out, the answer is a new drop. Scarcity is the product.</span></li>
+        <li class="rule-item"><span class="rule-dot" style="background:#185FA5"></span><span class="rule-text"><strong>Discount codes only through creator partnerships, never publicly.</strong> A creator-exclusive code is marketing spend. A public "SAVE15" banner is brand damage.</span></li>
+      </ul>
+      <button class="ask-btn" onclick="sendPrompt('Build a financial model for The Elar Year 1 — revenue, units, margins, and CAC targets')">Build Year 1 financial model</button>
+
+    </div>
+
+    <!-- ════════════════ SOURCING ════════════════ -->
+    <div class="panel" id="panel-sourcing">
+
+      <div class="moat-box" style="margin-bottom:28px">
+        <div class="moat-title">Your sourcing IS your brand story — treat it that way</div>
+        <div class="moat-body">India has one of the world's richest textile ecosystems — over 30 distinct handloom traditions, each with its own geography, weave identity, and artisan community. For The Elar, sourcing isn't a back-office function. It's the core of the brand narrative. <strong>Where the fabric comes from, who made it, and why it matters</strong> — these are the stories that make Gen Z pay ₹4,500 for a shirt instead of ₹1,200. Build your supply chain like you're building content. Because you are.</div>
+      </div>
+
+      <div class="sec-label">India's six most important textile clusters for The Elar</div>
+      <div class="grid-2">
+        <div class="cluster-card cl-1" onclick="sendPrompt('Tell me more about Bhagalpur as a sourcing destination — who to contact, what to expect, and how to work with weavers there for The Elar')">
+          <div class="cluster-head"><div class="cluster-region">Bihar — East India</div><div class="cluster-name">Bhagalpur</div><div class="cluster-sub">Silk City · Tussar, Linen, Matka silk</div></div>
+          <div class="cluster-body"><div class="cluster-desc">Known as "Silk City," Bhagalpur has 30,000+ artisans and 25,000 handlooms. Produces India's finest Tussar (wild silk) with natural, earthy texture. The fabric already appeared in The Elar's brand copy — it must appear in the product too.</div><span class="tag ta">Tussar silk</span><span class="tag ta">Bhagalpuri linen</span><span class="tag ta">Matka silk</span><span class="tag ta">Natural dye-ready</span></div>
+        </div>
+        <div class="cluster-card cl-2" onclick="sendPrompt('Tell me more about Chanderi and Maheshwar as sourcing clusters for a premium D2C brand')">
+          <div class="cluster-head"><div class="cluster-region">Madhya Pradesh — Central India</div><div class="cluster-name">Chanderi & Maheshwar</div><div class="cluster-sub">Sheer cotton-silk blends · Lightweight luxury</div></div>
+          <div class="cluster-body"><div class="cluster-desc">Two adjacent clusters producing India's most sought-after sheer fabrics. Chanderi is a translucent cotton-silk-zari weave, luminous and lightweight. Maheshwari is a reversible cotton-silk blend. Both are GI-tagged with instant cultural recognition among Gen Z who follow Indian fashion.</div><span class="tag tp">Chanderi silk-cotton</span><span class="tag tp">Maheshwari weave</span><span class="tag tp">GI-tagged</span><span class="tag tp">Fusion-ready</span></div>
+        </div>
+        <div class="cluster-card cl-3" onclick="sendPrompt('How should The Elar work with Jaipur block print artisans — direct sourcing vs aggregator?')">
+          <div class="cluster-head"><div class="cluster-region">Rajasthan — Northwest India</div><div class="cluster-name">Jaipur</div><div class="cluster-sub">Block print capital · Bagru, Sanganeri, Dabu</div></div>
+          <div class="cluster-body"><div class="cluster-desc">India's block print hub. Bagru and Sanganer villages produce the most globally recognised Indian surface prints. Dabu mud-resist printing, indigo work, and ajrakh also available nearby. Ideal for The Elar's surface design language — prints on contemporary silhouettes are exactly the cultural fusion the brand stands for.</div><span class="tag tc">Bagru block print</span><span class="tag tc">Natural indigo</span><span class="tag tc">Dabu resist</span><span class="tag tc">Low MOQ available</span></div>
+        </div>
+        <div class="cluster-card cl-4" onclick="sendPrompt('What makes Pochampally Ikat special and how can The Elar incorporate it into a Gen Z-friendly premium collection?')">
+          <div class="cluster-head"><div class="cluster-region">Telangana — South India</div><div class="cluster-name">Pochampally</div><div class="cluster-sub">Ikat weaving · Geometric patterns</div></div>
+          <div class="cluster-body"><div class="cluster-desc">Home of India's most striking geometric ikat weaves. Pochampally ikat uses resist-dyeing yarn before weaving — creating slightly blurred, intensely graphic patterns that are inherently premium-looking. GI-tagged. Works exceptionally well in shirts, dupattas, and co-ord sets.</div><span class="tag ts">Pochampally ikat</span><span class="tag ts">GI-tagged</span><span class="tag ts">Geometric weave</span><span class="tag ts">Contemporary recolour</span></div>
+        </div>
+        <div class="cluster-card cl-5" onclick="sendPrompt('How can The Elar use Banarasi textile craft in its signature tier without it feeling like bridal wear?')">
+          <div class="cluster-head"><div class="cluster-region">Uttar Pradesh — North India</div><div class="cluster-name">Varanasi (Banaras)</div><div class="cluster-sub">Banarasi brocade · Zari weaving · Silk</div></div>
+          <div class="cluster-body"><div class="cluster-desc">The most prestigious Indian textile tradition. Banarasi silk features intricate zari brocade with Persian-Mughal motifs. Typically bridal — but that's precisely the opportunity. Used sparingly in structured blazers or limited drops, Banarasi becomes subversively luxurious. Reserve for Tier 3 and Tier 4 only.</div><span class="tag" style="background:#F7C1C1;color:#A32D2D">Banarasi brocade</span><span class="tag" style="background:#F7C1C1;color:#A32D2D">Zari work</span><span class="tag" style="background:#F7C1C1;color:#A32D2D">Signature tier only</span></div>
+        </div>
+        <div class="cluster-card cl-6" onclick="sendPrompt('How can The Elar source Kutch embroidery authentically — what artisan organisations should we approach?')">
+          <div class="cluster-head"><div class="cluster-region">Gujarat — West India</div><div class="cluster-name">Kutch</div><div class="cluster-sub">Embroidery · Mirror work · Bandhani</div></div>
+          <div class="cluster-body"><div class="cluster-desc">India's embroidery capital — home to 12+ distinct styles (Rabari, Ahir, Suf, Shisha mirror work). Working directly with Kutch cooperatives (Khamir, Qasab) gives The Elar both authentic craft access and compelling brand storytelling about the artisan communities involved.</div><span class="tag tg">Kutch embroidery</span><span class="tag tg">Mirror shisha work</span><span class="tag tg">Bandhani</span><span class="tag tg">Cooperative sourcing</span></div>
+        </div>
+      </div>
+      <button class="ask-btn" onclick="sendPrompt('Build a 3-cluster sourcing plan for The Elar for Year 1 — which clusters to prioritise, in what order, and why')">Build Year 1 cluster plan</button>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">Supplier platforms — who to work with at each stage</div>
+      <div class="plat-card" onclick="sendPrompt('How should The Elar get started with Fabriclore — what fabrics to sample and how to structure a first order?')">
+        <div class="plat-row"><div class="plat-name">Fabriclore</div><span class="plat-type pt-platform">B2B platform</span></div>
+        <div class="plat-desc">India's leading B2B fabric sourcing platform, trusted by 400+ D2C fashion brands. Digital printing, screen printing, hand block printing, and custom dyeing — all under one roof. Ideal for the launch phase. Strong for linen, cotton, silk blends, and custom-printed fabrics.</div>
+        <div class="plat-meta"><span><strong>MOQ:</strong> 50–300m</span><span><strong>Lead time:</strong> 15–30 days</span><span><strong>Best for:</strong> Core tier, printed fabrics, sampling</span></div>
+      </div>
+      <div class="plat-card" onclick="sendPrompt('Tell me more about Anuprerna as a sourcing partner and how The Elar should approach them')">
+        <div class="plat-row"><div class="plat-name">Anuprerna</div><span class="plat-type pt-direct">Artisan manufacturer</span></div>
+        <div class="plat-desc">East India–based artisan manufacturer working with 300+ skilled weavers. Specialises in handloom fabrics — khadi, cotton, linen, hemp, bamboo, mulberry silk, matka silk. Low MOQs for an artisan operation. Strong ethical sourcing credentials for brand storytelling.</div>
+        <div class="plat-meta"><span><strong>MOQ:</strong> Low (custom basis)</span><span><strong>Lead time:</strong> 3–6 weeks</span><span><strong>Best for:</strong> Handloom fabrics, artisan content, signature tier</span></div>
+      </div>
+      <div class="plat-card" onclick="sendPrompt('How should The Elar approach direct sourcing from weaver cooperatives — what organisations exist in India?')">
+        <div class="plat-row"><div class="plat-name">Direct Weaver Cooperatives</div><span class="plat-type pt-direct">Direct sourcing</span></div>
+        <div class="plat-desc">For signature and limited drop tiers, direct cooperative relationships unlock the most authentic craft and best margin. Key orgs: Khamir (Kutch), Dastkar (6000+ artisans nationwide), NID Craft Documentation Unit. Essential for premium positioning — requires in-person visits.</div>
+        <div class="plat-meta"><span><strong>MOQ:</strong> Negotiable, often very low</span><span><strong>Lead time:</strong> 4–12 weeks</span><span><strong>Best for:</strong> Signature tier, limited drops, brand storytelling</span></div>
+      </div>
+      <div class="plat-card" onclick="sendPrompt('What is iTokri and how can The Elar use it as a sampling resource for Indian handloom fabrics?')">
+        <div class="plat-row"><div class="plat-name">iTokri</div><span class="plat-type pt-platform">Discovery + sampling</span></div>
+        <div class="plat-desc">India's most comprehensive handloom fabric discovery marketplace — 40+ regional craft traditions in one place: Ajrakh, Jamdani, Chanderi, Ikat, Kantha, Kalamkari, Banarasi and more. Use as a swatch and sampling resource before committing to a direct cluster relationship.</div>
+        <div class="plat-meta"><span><strong>Use for:</strong> Sampling, design research</span><span><strong>Not for:</strong> Bulk manufacturing</span><span><strong>Value:</strong> 40+ craft traditions in one place</span></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">Sourcing phase plan — what to do when</div>
+      <div class="card" style="margin-bottom:18px">
+        <table class="priority-table">
+          <thead><tr><th>Phase</th><th>Cluster / Supplier</th><th>What to Source</th><th>Why First</th><th>Timing</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill pill-now">Phase 1</span></td><td class="tdname">Fabriclore + Jaipur block print</td><td>Core linen / cotton fabrics, surface prints</td><td>Low MOQ, fast lead times. Jaipur print labs understand small-batch fashion.</td><td>Months 1–3</td></tr>
+            <tr><td><span class="pill pill-now">Phase 1</span></td><td class="tdname">Bhagalpur (via Anuprerna)</td><td>Tussar silk, linen — core and signature shirts</td><td>The fabric already lives in your brand copy. It must live in your product.</td><td>Months 2–4</td></tr>
+            <tr><td><span class="pill pill-mid">Phase 2</span></td><td class="tdname">Chanderi & Maheshwar</td><td>Sheer co-ords, dupattas, occasion pieces</td><td>GI-tagged, high-story fabrics. Add after core range is stable.</td><td>Months 5–8</td></tr>
+            <tr><td><span class="pill pill-mid">Phase 2</span></td><td class="tdname">Pochampally (sample via iTokri first)</td><td>Ikat shirts, co-ord prints</td><td>High visual impact, Gen Z-friendly. Sample first, then direct cluster relationship.</td><td>Months 6–9</td></tr>
+            <tr><td><span class="pill pill-later">Phase 3</span></td><td class="tdname">Kutch cooperatives (Khamir / Qasab)</td><td>Embroidered statement pieces, limited drops</td><td>Requires in-person visits. Long lead times. Worth it for signature and drops.</td><td>Months 9–14</td></tr>
+            <tr><td><span class="pill pill-later">Phase 3</span></td><td class="tdname">Varanasi (direct master weavers)</td><td>Brocade detail pieces, festive limited drops</td><td>Highest prestige, most complex sourcing. Use sparingly — should feel like an event.</td><td>Months 12–18</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sec-label">Non-negotiable sourcing principles</div>
+      <ul class="rule-list">
+        <li class="rule-item"><span class="rule-dot" style="background:#534AB7"></span><span class="rule-text"><strong>Always visit before you commit.</strong> For any direct weaver or cooperative relationship — send someone in person before placing a bulk order. You'll understand the supply chain and come back with better brand content.</span></li>
+        <li class="rule-item"><span class="rule-dot" style="background:#0F6E56"></span><span class="rule-text"><strong>Start every cluster with a sampling run, never a bulk order.</strong> Order 5–10 metres, have garments made, wash-test them, photograph them. Handloom fabrics vary by weaver, loom, and season.</span></li>
+        <li class="rule-item"><span class="rule-dot" style="background:#854F0B"></span><span class="rule-text"><strong>Prioritise GI-tagged fabrics wherever possible.</strong> Chanderi, Maheshwari, Pochampally, and Banarasi all carry Geographical Indication tags — legal certification of authentic origin. Always mention the GI tag on product pages.</span></li>
+        <li class="rule-item"><span class="rule-dot" style="background:#993C1D"></span><span class="rule-text"><strong>Document everything for content.</strong> Photograph fabric on the loom. Film the dyeing process. Record the weaver's name. This is your most valuable brand content — authentic, irreproducible, and deeply compelling to Gen Z.</span></li>
+        <li class="rule-item"><span class="rule-dot" style="background:#185FA5"></span><span class="rule-text"><strong>Never over-rely on a single cluster or supplier.</strong> Build relationships across at least 2–3 clusters in Year 1 so a production delay in one doesn't halt your entire collection.</span></li>
+      </ul>
+      <button class="ask-btn" onclick="sendPrompt('What questions should The Elar ask a weaver cooperative on a first visit — give me a sourcing due diligence checklist')">Get sourcing visit checklist</button>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">Supplier evaluation checklist — before you place any order</div>
+      <div class="check-grid">
+        <div class="check-item"><span class="check-icon">✓</span>Ask for fabric swatch + wash test results (shrinkage, colourfastness)</div>
+        <div class="check-item"><span class="check-icon">✓</span>Confirm GI tag certification if claiming handloom origin</div>
+        <div class="check-item"><span class="check-icon">✓</span>Verify MOQ is achievable for your launch volume</div>
+        <div class="check-item"><span class="check-icon">✓</span>Ask about lead time in peak season (Diwali, wedding season = slower)</div>
+        <div class="check-item"><span class="check-icon">✓</span>Understand weave/print variation tolerance — handloom is never 100% uniform</div>
+        <div class="check-item"><span class="check-icon">✓</span>Confirm natural vs chemical dye composition (important for brand claims)</div>
+        <div class="check-item"><span class="check-icon">✓</span>Check if supplier has worked with D2C brands before</div>
+        <div class="check-item"><span class="check-icon">✓</span>Ask for 3 references from other fashion brand buyers</div>
+        <div class="check-item"><span class="check-icon">✓</span>Clarify payment terms — advance, milestone, or on delivery</div>
+        <div class="check-item"><span class="check-icon">✓</span>Confirm care label instructions for each fabric type</div>
+      </div>
+
+    </div>
+
+    <!-- ════════════════ DOCUMENTS ════════════════ -->
+    <div class="panel" id="panel-documents">
+
+      <!-- How-to banner -->
+      <div class="howto-banner" id="howto-banner">
+        <div class="howto-icon">💡</div>
+        <div>
+          <div class="howto-title">How to add a Google Drive document</div>
+          <div class="howto-steps">
+            <ol>
+              <li>Open your file in Google Docs, Sheets, or Slides</li>
+              <li>Click <strong>Share</strong> → set access to <strong>"Anyone with the link can view"</strong></li>
+              <li>Copy the link and paste it in the form below</li>
+            </ol>
+          </div>
+        </div>
+        <span class="howto-close" onclick="document.getElementById('howto-banner').style.display='none'">×</span>
+      </div>
+
+      <!-- Add document form -->
+      <div class="add-doc-form" id="add-doc-form">
+        <div class="add-doc-form-title">Add a Google Drive document</div>
+        <div class="add-doc-form-sub">Paste the share link from Google Drive. The document will be embedded with a live preview below.</div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Document Title</label>
+            <input type="text" id="doc-input-title" placeholder="e.g. Q1 Campaign Plan" />
+          </div>
+          <div class="form-field">
+            <label>Type</label>
+            <select id="doc-input-type">
+              <option value="doc">Google Doc</option>
+              <option value="sheet">Google Sheet</option>
+              <option value="slides">Google Slides</option>
+              <option value="pdf">PDF</option>
+              <option value="other">Other / Link</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field form-full">
+            <label>Google Drive Share Link</label>
+            <input type="url" id="doc-input-url" placeholder="https://docs.google.com/document/d/..." />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field form-full">
+            <label>Description <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#bfb09a">(optional)</span></label>
+            <textarea id="doc-input-desc" rows="2" placeholder="Brief note about what this document covers…"></textarea>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" onclick="addDocument()">Add Document</button>
+          <button class="btn-secondary" onclick="clearDocForm()">Clear</button>
+          <div class="form-hint" id="doc-form-error" style="color:#A32D2D;display:none"></div>
+        </div>
+      </div>
+
+      <!-- Documents list header -->
+      <div class="docs-section-header" id="docs-section-header" style="display:none">
+        <div>
+          <div class="docs-section-title">Shared <em>Documents</em></div>
+          <div class="docs-section-count" id="docs-section-count">0 documents</div>
+        </div>
+        <button class="btn-add-doc" onclick="document.getElementById('add-doc-form').scrollIntoView({behavior:'smooth'})">
+          + Add another
+        </button>
+      </div>
+
+      <!-- Empty state (shown when no docs) -->
+      <div class="docs-empty" id="docs-empty-state">
+        <div class="docs-empty-icon">📁</div>
+        <div class="docs-empty-title">No documents yet</div>
+        <div class="docs-empty-sub">Add a Google Drive share link above to display Docs, Sheets, Slides, or PDFs inline in this section.</div>
+      </div>
+
+      <!-- Documents render area -->
+      <div id="docs-list"></div>
+
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────
+const brandVariants = [
+  ['Naeem Khan',4231,'#c9963a'],['HARAGO',2061,'#4a7c5a'],['Sui',1923,'#e07b2a'],
+  ['Bunaai',1493,'#c9963a'],['Kanika Goyal',1485,'#4a7c5a'],['Rimzim Dadu',1434,'#c45e35'],
+  ['Gaurav Gupta',1250,'#4b3d8f'],['Dhruv Kapoor',998,'#c9963a'],['Injiri',719,'#4a7c5a'],
+  ['An Indian Summer',684,'#e07b2a'],['Diksha Khanna',605,'#c45e35'],['QUOD',603,'#4b3d8f'],
+  ['Rahul Mishra',404,'#c9963a'],['Indian Summer Co',354,'#4a7c5a'],['Kartik Research',269,'#e07b2a']
+];
+const uniqueProducts = [
+  ['Bunaai',250],['An Indian Summer',250],['Injiri',250],['Sui',250],
+  ['Rimzim Dadu',233],['Gaurav Gupta',226],['Rahul Mishra',222],['Naeem Khan',219],
+  ['HARAGO',203],['Kanika Goyal',199],['Dhruv Kapoor',198],['Diksha Khanna',122],
+  ['Indian Summer Co',96],['QUOD',85],['Kartik Research',58]
+];
+const pricingData = [
+  ['Bunaai','3,500',3500,'#4a7c5a'],['Sui','7,300',7300,'#4a7c5a'],
+  ['Indian Summer Co','10,200',10200,'#2e3c7e'],['QUOD','14,990',14990,'#2e3c7e'],
+  ['Diksha Khanna','16,500',16500,'#2e3c7e'],['Kanika Goyal','24,500',24500,'#2e3c7e'],
+  ['HARAGO','25,000',25000,'#2e3c7e'],['Dhruv Kapoor','32,000',32000,'#2e3c7e'],
+  ['Injiri','38,000',38000,'#e07b2a'],['Kartik Research','48,000',48000,'#e07b2a'],
+  ['Rimzim Dadu','1,58,000',158000,'#c45e35'],['Gaurav Gupta','1,95,000',195000,'#c45e35'],
+  ['Rahul Mishra','1,99,500',199500,'#c45e35']
+];
+const priceTiers = [
+  ['Under ₹1,000',739,'#4a7c5a'],['₹1k – 5k',1881,'#4a7c5a'],
+  ['₹5k – 10k',1618,'#2e3c7e'],['₹10k – 25k',3555,'#2e3c7e'],
+  ['₹25k – 50k',3130,'#e07b2a'],['₹50k – 1L',956,'#e07b2a'],['Above ₹1L',6464,'#c45e35']
+];
+const saleOOS = [
+  ['Bunaai','71%','87%'],['Indian Summer Co','26%','16%'],['Sui','17%','65%'],
+  ['An Indian Summer','6%','15%'],['Diksha Khanna','2%','7%'],['Kartik Research','0%','59%'],
+  ['Dhruv Kapoor','0%','24%'],['Kanika Goyal','0%','2%'],['HARAGO','0%','10%'],
+  ['Gaurav Gupta','0%','11%'],['QUOD','0%','1%'],['Rimzim Dadu','0%','0%']
+];
+const crafts = [
+  ['Embroidered',3056],['Block print',862],['Sequin',669],['Hand embroidery',621],
+  ['Patchwork',281],['Appliqué',240],['Kantha',182],['Bandhani / tie-dye',167],['Bead embroidery',40]
+];
+const materials = [
+  ['Cotton',3037],['Silk',1219],['Polyester',1205],['Eri / tussar',668],
+  ['Organic cotton',653],['Handwoven',488],['Chanderi',265],['Linen',255],['Handloom',230]
+];
+const craftSig = [
+  ['Rahul Mishra','Zardozi / embroidery','tp'],['HARAGO','Kantha embroidery','tp'],
+  ['Naeem Khan','Embroidery + sequin','tp'],['Gaurav Gupta','Bead embroidery','tp'],
+  ['Injiri','Bandhani / hand-dye','tb'],['Sui','Hand embroidery + block print','tb'],
+  ['An Indian Summer','Block print','tb'],['Bunaai','Gota + block print','tg'],
+  ['Diksha Khanna','Patchwork','ta'],['Kartik Research','Kantha / patchwork','ta'],
+  ['Kanika Goyal','Patchwork / appliqué','ta'],['Dhruv Kapoor','Sequin / thread work','tc'],
+  ['Rimzim Dadu','Appliqué / metallic','tc'],['QUOD','Hand embroidery','tp'],
+  ['Indian Summer Co','Hand-painted','tb']
+];
+const productTypes = [
+  ['Gown',2627],['Dress',2054],['Jacket',479],['Shirt',387],['Co-ord set',365],
+  ['Top',330],['Lehenga',308],['Saree',283],['Caftan',237],['Tuxedo',208],
+  ['Bolero',187],['Skirt',164],['Kurta',140],['Pants',135],['Bandhgala',130]
+];
+const sizeDiversity = [
+  ['An Indian Summer',154],['Injiri',48],['Dhruv Kapoor',34],['Indian Summer Co',29],
+  ['Bunaai',22],['Sui',20],['Kartik Research',19],['HARAGO',17],['Rimzim Dadu',13],
+  ['QUOD',11],['Kanika Goyal',11],['Diksha Khanna',9],['Naeem Khan',5],
+  ['Rahul Mishra',5],['Gaurav Gupta',1]
+];
+const gapsData = [
+  { icon:'🪡', title:'Craft Gap', color:'#4b3d8f', bg:'rgba(75,61,143,0.07)', text:'Zardozi, kalamkari, phulkari barely present outside Rahul Mishra. Major craft techniques with zero representation at accessible price points — a deep opportunity for artisan-led positioning.' },
+  { icon:'🌅', title:'Occasion Gap', color:'#2e3c7e', bg:'rgba(46,60,126,0.07)', text:'Everyday Indian wear (not occasion/couture) is profoundly underserved. Most brands skew heavily formal or bridal — the daily-wear category with craft sensibility is wide open.' },
+  { icon:'📐', title:'Sizing Gap', color:'#4a7c5a', bg:'rgba(74,124,90,0.08)', text:'Only An Indian Summer and Injiri offer extended sizing. Indian body diversity is almost entirely ignored across 13 of 15 brands — a significant market left uncaptured.' },
+  { icon:'🧵', title:'Material Gap', color:'#8a4e10', bg:'rgba(224,123,42,0.07)', text:'Handloom fabrics (Chanderi, Maheshwari, Sambalpuri) appear as tags but rarely as the primary product story. Heritage fabric identity remains a largely untapped narrative angle.' },
+  { icon:'💰', title:'Price Gap', color:'#8a2e10', bg:'rgba(196,94,53,0.07)', text:'₹5,000–₹15,000 for Indian-craft Western silhouettes is a visible white space. Bunaai plays below, QUOD and Diksha Khanna play above. The middle is uncontested.' },
+  { icon:'👔', title:'Menswear Gap', color:'#3a3a3a', bg:'rgba(26,18,8,0.05)', text:'Only Dhruv Kapoor and QUOD show significant menswear (tuxedo, bandhgala). Indian craft menswear with a contemporary perspective is essentially wide open.' }
+];
+
+// ─── RENDER BARS ────────────────────────────────────────────────────────────
+function renderBars(id, data, maxVal, colorFn, lblWidth=140, valFn=null) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = data.map(([lbl, val, ...rest]) => {
+    const pct = Math.round(val/maxVal*100);
+    const color = typeof colorFn === 'function' ? colorFn(val,...rest) : (rest[0] || colorFn);
+    const dv = valFn ? valFn(val) : val.toLocaleString();
+    return `<div class="bar-row">
+      <div class="bar-lbl" style="width:${lblWidth}px">${lbl}</div>
+      <div class="bar-track"><div class="bar-fill" data-w="${pct}%" style="background:${color}"></div></div>
+      <div class="bar-val">${dv}</div>
+    </div>`;
+  }).join('');
+}
+
+function animateBars(scope) {
+  const ctx = scope || document;
+  ctx.querySelectorAll('.bar-fill').forEach((b,i) => {
+    const w = b.dataset.w;
+    b.style.width = '0';
+    setTimeout(() => { b.style.width = w; }, i * 40 + 60);
+  });
+}
+
+function buildAll() {
+  renderBars('brand-variants-bars', brandVariants, 4231, (v,c)=>c, 130);
+  renderBars('unique-products-bars', uniqueProducts, 250, ()=>'#4b3d8f', 130);
+  renderBars('price-positioning-bars', pricingData, 199500, (v,c,t)=>t, 140, v=>`₹${pricingData.find(d=>d[2]===v)?.[1]||v}`);
+  renderBars('price-tier-bars', priceTiers, 6464, (v,c,t)=>t, 110);
+  renderBars('craft-bars', crafts, 3056, ()=>'#4b3d8f', 150);
+  renderBars('material-bars', materials, 3037, ()=>'#4a7c5a', 150);
+  renderBars('product-type-bars', productTypes, 2627, ()=>'#c45e35', 110);
+  renderBars('size-diversity-bars', sizeDiversity, 154, ()=>'#e07b2a', 140);
+
+  // Sale/OOS table
+  const sEl = document.getElementById('sale-oos-table');
+  if (sEl) sEl.innerHTML = saleOOS.map(([b,s,o]) => `
+    <div class="sale-row">
+      <span style="color:#6a5d48;width:130px;display:inline-block;font-size:12px">${b}</span>
+      <span class="tag ta" style="font-size:10px">${s} sale</span>
+      <span class="tag tc" style="font-size:10px">${o} OOS</span>
+    </div>`).join('');
+
+  // Craft sig
+  const csEl = document.getElementById('craft-sig-grid');
+  if (csEl) csEl.innerHTML = craftSig.map(([b,c,cls]) => `
+    <div class="craft-item"><span class="craft-brand">${b}</span><span class="tag ${cls}" style="font-size:10px">${c}</span></div>`).join('');
+
+  // Gaps
+  const gEl = document.getElementById('gaps-list');
+  if (gEl) gEl.innerHTML = gapsData.map(g => `
+    <div class="insight-row">
+      <div class="insight-icon" style="background:${g.bg}">${g.icon}</div>
+      <div>
+        <div class="insight-row-title" style="color:${g.color}">${g.title}</div>
+        <div class="insight-row-text">${g.text}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ─── PANEL CONFIGS ───────────────────────────────────────────────────────────
+const panelConfig = {
+  market: {
+    eyebrow: 'Market Research',
+    title: 'Market <em>Brief</em>',
+    subtitle: 'India luxury fashion market · Gen Z opportunity analysis · 2025',
+    stats: [
+      {val:'$9.4B', label:'Market Size'},
+      {val:'377M', label:'Gen Z India'},
+      {val:'5–7%', label:'CAGR'}
+    ]
+  },
+  competitive: {
+    eyebrow: 'Competitive Intelligence',
+    title: 'Competitive <em>Data</em>',
+    subtitle: '15 brands analysed · 2,861 unique products · 18,513 variants',
+    stats: [
+      {val:'15', label:'Brands'},
+      {val:'2,861', label:'Products'},
+      {val:'6', label:'Gaps Found'}
+    ]
+  },
+  brand: {
+    eyebrow: 'Brand Strategy',
+    title: 'Brand <em>Story</em>',
+    subtitle: 'Core truth · Personas · Voice · Narrative arc · Sample language',
+    stats: [
+      {val:'4', label:'Personas'},
+      {val:'4', label:'Voice Pillars'},
+      {val:'5', label:'Arc Steps'}
+    ]
+  },
+  pricing: {
+    eyebrow: 'Pricing Strategy',
+    title: 'Pricing <em>Framework</em>',
+    subtitle: 'Four-tier architecture · Margin guidance · Channel pricing · Gen Z psychology',
+    stats: [
+      {val:'4', label:'Price Tiers'},
+      {val:'58–65%', label:'Target Margin'},
+      {val:'₹2.5k–12k', label:'Sweet Spot'}
+    ]
+  },
+  sourcing: {
+    eyebrow: 'Textile Sourcing',
+    title: 'Sourcing <em>Guide</em>',
+    subtitle: '6 craft clusters · 4 supplier platforms · Phase plan · Principles',
+    stats: [
+      {val:'6', label:'Clusters'},
+      {val:'4', label:'Platforms'},
+      {val:'3', label:'Phases'}
+    ]
+  },
+  documents: {
+    eyebrow: 'Shared Documents',
+    title: 'Drive <em>Files</em>',
+    subtitle: 'Embed Google Docs, Sheets, Slides & PDFs from your Drive — live previews',
+    stats: [
+      {val:'0', label:'Documents', id:'hstat-doc-count'},
+      {val:'Live', label:'Preview'},
+      {val:'Drive', label:'Source'}
+    ]
+  }
+};
+
+// ─── NAVIGATION ─────────────────────────────────────────────────────────────
+function switchPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const panel = document.getElementById('panel-' + id);
+  if (panel) { panel.classList.add('active'); setTimeout(()=>animateBars(panel),50); }
+  const navItem = document.querySelector(`.nav-item[data-panel="${id}"]`);
+  if (navItem) navItem.classList.add('active');
+  const cfg = panelConfig[id];
+  if (cfg) {
+    document.getElementById('hdr-eyebrow').textContent = cfg.eyebrow;
+    document.getElementById('hdr-title').innerHTML = cfg.title;
+    document.getElementById('hdr-subtitle').textContent = cfg.subtitle;
+    document.getElementById('hdr-stats').innerHTML = cfg.stats.map(s =>
+      `<div class="hstat"><div class="hstat-val">${s.val}</div><div class="hstat-label">${s.label}</div></div>`
+    ).join('');
+  }
+}
+
+function switchSubTab(btn, id) {
+  const subNav = btn.closest('.sub-nav');
+  subNav.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const panel = btn.closest('.panel');
+  panel.querySelectorAll('.sub-panel').forEach(p => { p.style.display='none'; p.classList.remove('active'); });
+  const target = document.getElementById(id);
+  if (target) { target.style.display='block'; target.classList.add('active'); setTimeout(()=>animateBars(target),50); }
+}
+
+function sendPrompt(text) {
+  if (typeof window.sendPrompt === 'function') { window.sendPrompt(text); return; }
+  const detail = { text };
+  window.dispatchEvent(new CustomEvent('sendprompt', { detail }));
+}
+
+// ─── DOCUMENTS ───────────────────────────────────────────────────────────────
+let documents = [];
+
+const DOC_TYPES = {
+  doc:    { icon: '📄', label: 'Google Doc',    cls: 'type-doc' },
+  sheet:  { icon: '📊', label: 'Google Sheet',  cls: 'type-sheet' },
+  slides: { icon: '📑', label: 'Google Slides', cls: 'type-slides' },
+  pdf:    { icon: '📕', label: 'PDF',           cls: 'type-pdf' },
+  other:  { icon: '🔗', label: 'Link',          cls: 'type-other' }
+};
+
+function driveEmbedUrl(rawUrl, type) {
+  // Google Docs/Sheets/Slides: convert share link → embed link
+  if (/docs\.google\.com\/(document|spreadsheets|presentation)/.test(rawUrl)) {
+    // Strip existing query params & /edit, /view etc., then add /preview or /pubhtml
+    let base = rawUrl.split('?')[0].replace(/\/(edit|view|pub|preview|copy|htmlview|mobileediting)[^/]*/i, '');
+    if (type === 'sheet') return base + '/htmlview?embedded=true';
+    return base + '/preview';
+  }
+  // Google Drive file viewer
+  const fileIdMatch = rawUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (fileIdMatch) return `https://drive.google.com/file/d/${fileIdMatch[1]}/preview`;
+  // Already an embed URL or other
+  return rawUrl;
+}
+
+function addDocument() {
+  const title = document.getElementById('doc-input-title').value.trim();
+  const type  = document.getElementById('doc-input-type').value;
+  const url   = document.getElementById('doc-input-url').value.trim();
+  const desc  = document.getElementById('doc-input-desc').value.trim();
+  const errEl = document.getElementById('doc-form-error');
+
+  if (!title) { showFormError('Please enter a document title.'); return; }
+  if (!url)   { showFormError('Please paste a Google Drive share link.'); return; }
+  if (!/^https?:\/\//.test(url)) { showFormError('Link must start with https://'); return; }
+
+  errEl.style.display = 'none';
+  const doc = { id: Date.now(), title, type, url, desc, embedUrl: driveEmbedUrl(url, type), collapsed: false, height: 480 };
+  documents.push(doc);
+  renderDocuments();
+  clearDocForm();
+  updateDocStats();
+}
+
+function removeDocument(id) {
+  documents = documents.filter(d => d.id !== id);
+  renderDocuments();
+  updateDocStats();
+}
+
+function showFormError(msg) {
+  const el = document.getElementById('doc-form-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function clearDocForm() {
+  ['doc-input-title','doc-input-url','doc-input-desc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('doc-input-type').value = 'doc';
+  document.getElementById('doc-form-error').style.display = 'none';
+}
+
+function toggleDocPreview(id) {
+  const doc = documents.find(d => d.id === id);
+  if (!doc) return;
+  doc.collapsed = !doc.collapsed;
+  const wrap = document.getElementById('doc-preview-' + id);
+  const btn  = document.getElementById('toggle-btn-' + id);
+  const collapsed = document.getElementById('doc-collapsed-' + id);
+  if (wrap) wrap.style.display = doc.collapsed ? 'none' : 'block';
+  if (collapsed) collapsed.style.display = doc.collapsed ? 'flex' : 'none';
+  if (btn) btn.textContent = doc.collapsed ? 'Show Preview' : 'Hide Preview';
+}
+
+function setDocHeight(id, height) {
+  const doc = documents.find(d => d.id === id);
+  if (!doc) return;
+  doc.height = height;
+  const wrap = document.getElementById('doc-iframe-wrap-' + id);
+  if (wrap) wrap.style.height = height + 'px';
+  document.querySelectorAll(`#doc-size-btns-${id} .size-btn`).forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.h) === height);
+  });
+}
+
+function updateDocStats() {
+  const count = documents.length;
+  // sidebar badge
+  const badge = document.getElementById('doc-count-badge');
+  if (badge) { badge.textContent = count; badge.style.display = count > 0 ? 'inline-block' : 'none'; }
+  // header stat
+  const hstatEl = document.querySelector('#hdr-stats .hstat-val');
+  // update count in section
+  const countEl = document.getElementById('docs-section-count');
+  if (countEl) countEl.textContent = count + (count === 1 ? ' document' : ' documents');
+  // update panelConfig stat so switchPanel re-renders correctly
+  panelConfig.documents.stats[0].val = String(count);
+}
+
+function renderDocuments() {
+  const list = document.getElementById('docs-list');
+  const empty = document.getElementById('docs-empty-state');
+  const sectionHeader = document.getElementById('docs-section-header');
+
+  if (!documents.length) {
+    empty.style.display = 'flex';
+    sectionHeader.style.display = 'none';
+    list.innerHTML = '';
+    return;
+  }
+
+  empty.style.display = 'none';
+  sectionHeader.style.display = 'flex';
+
+  list.innerHTML = documents.map(doc => {
+    const t = DOC_TYPES[doc.type] || DOC_TYPES.other;
+    const heights = [320, 480, 640];
+    return `
+    <div class="doc-card ${t.cls}" id="doc-card-${doc.id}">
+      <div class="doc-card-header">
+        <div class="doc-header-left">
+          <div class="doc-type-icon">${t.icon}</div>
+          <div class="doc-title-area">
+            <div class="doc-title">${escHtml(doc.title)}</div>
+            <div class="doc-meta">
+              <span class="doc-type-badge">${t.label}</span>
+              ${doc.desc ? `<span class="doc-desc-text">· ${escHtml(doc.desc)}</span>` : ''}
+            </div>
+          </div>
+        </div>
+        <div class="doc-card-actions">
+          <button class="doc-action-btn" id="toggle-btn-${doc.id}" onclick="toggleDocPreview(${doc.id})">Hide Preview</button>
+          <a class="doc-action-btn primary-action" href="${escHtml(doc.url)}" target="_blank" rel="noopener">Open ↗</a>
+          <button class="doc-action-btn danger" onclick="removeDocument(${doc.id})" title="Remove">✕</button>
+        </div>
+      </div>
+
+      <div class="doc-preview-area">
+        <div class="doc-preview-bar">
+          <span class="doc-preview-label">Live Preview</span>
+          <div class="preview-size-btns" id="doc-size-btns-${doc.id}">
+            ${heights.map(h => `<button class="size-btn${h===doc.height?' active':''}" data-h="${h}" onclick="setDocHeight(${doc.id},${h})">${h===320?'Small':h===480?'Medium':'Large'}</button>`).join('')}
+          </div>
+        </div>
+
+        <div id="doc-preview-${doc.id}">
+          <div class="doc-iframe-wrap" id="doc-iframe-wrap-${doc.id}" style="height:${doc.height}px">
+            <div class="doc-iframe-loading" id="doc-loading-${doc.id}">
+              <div class="loading-spinner"></div>
+              <span>Loading preview…</span>
+            </div>
+            <iframe
+              src="${escHtml(doc.embedUrl)}"
+              allowfullscreen
+              loading="lazy"
+              onload="document.getElementById('doc-loading-${doc.id}').style.opacity='0';setTimeout(()=>{const el=document.getElementById('doc-loading-${doc.id}');if(el)el.style.display='none'},300)"
+            ></iframe>
+          </div>
+        </div>
+
+        <div class="doc-preview-collapsed" id="doc-collapsed-${doc.id}" style="display:none">
+          <span class="collapsed-hint">Preview hidden — click "Show Preview" to expand</span>
+          <a class="doc-action-btn" href="${escHtml(doc.url)}" target="_blank" rel="noopener" style="margin-top:0">Open in Drive ↗</a>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── INIT ───────────────────────────────────────────────────────────────────
+buildAll();
+setTimeout(() => animateBars(document.getElementById('panel-market')), 120);
+</script>
+</body>
+</html>
