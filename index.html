@@ -46,23 +46,42 @@ body {
   min-height: 100vh;
   font-size: 14px;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+/* Ensure all interactive elements respond to touch */
+button, a, [onclick], .nav-item, .sub-tab, .cluster-card,
+.persona, .insight, .plat-card, .doc-card, .ask-btn,
+.size-btn, .doc-action-btn, .btn-primary, .btn-secondary,
+.nav-tab, .mob-hamburger, .mob-overlay {
+  -webkit-tap-highlight-color: rgba(201,150,58,0.15);
+  touch-action: manipulation; /* prevents 300ms tap delay on iOS */
+  cursor: pointer;
+}
+
+/* Remove any stacking contexts from decorative wrappers */
+.content {
+  position: relative;
+  z-index: 1;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* TEXTURE LAYERS */
-body::before {
-  content: '';
-  position: fixed; inset: 0;
+/* Texture layers moved to a dedicated div#bg-layer in HTML
+   — avoids iOS fixed pseudo-element touch-blocking bug */
+body::before, body::after { content: none; }
+
+#bg-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
   background:
     radial-gradient(ellipse 80% 50% at 15% 10%, rgba(201,150,58,0.07) 0%, transparent 60%),
     radial-gradient(ellipse 60% 60% at 85% 85%, rgba(196,94,53,0.04) 0%, transparent 55%),
-    radial-gradient(ellipse 70% 70% at 50% 50%, rgba(46,60,126,0.025) 0%, transparent 65%);
-  pointer-events: none; z-index: 0;
-}
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='0.7' fill='%23c9963a' opacity='0.1'/%3E%3C/svg%3E");
-  pointer-events: none; z-index: 0;
+    radial-gradient(ellipse 70% 70% at 50% 50%, rgba(46,60,126,0.025) 0%, transparent 65%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='0.7' fill='%23c9963a' opacity='0.1'/%3E%3C/svg%3E");
 }
 
 /* ── SIDEBAR ─────────────────────────────────────── */
@@ -75,8 +94,9 @@ body::after {
   z-index: 200;
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  /* backdrop-filter removed — causes compositing issues on iOS
+     that prevent touch events reaching content underneath */
+  background: rgba(248,244,237,0.99);
 }
 
 .sidebar-brand {
@@ -193,7 +213,7 @@ body::after {
   border: 1px solid var(--border);
   border-radius: var(--r);
   padding: 4px;
-  width: fit-content;
+  max-width: 100%;
 }
 .sub-tab {
   padding: 7px 16px;
@@ -219,8 +239,8 @@ body::after {
 .main {
   margin-left: 240px;
   min-height: 100vh;
-  position: relative;
-  z-index: 5;
+  /* No position/z-index needed here — was creating a stacking context
+     that interfered with touch event propagation on mobile */
 }
 
 .page-header {
@@ -233,8 +253,9 @@ body::after {
   gap: 24px;
   position: sticky;
   top: 0;
-  z-index: 100;
-  backdrop-filter: blur(10px);
+  z-index: 50;
+  /* backdrop-filter removed — causes iOS touch-blocking on sticky elements */
+  background: rgba(248,244,237,0.98);
 }
 
 .page-title-area {}
@@ -295,11 +316,13 @@ body::after {
 }
 
 /* ── PANELS ─────────────────────────────────────── */
-.panel { display: none; animation: fadeUp 0.3s ease; }
-.panel.active { display: block; }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Removed CSS animation from .panel — transform/opacity animations
+   create stacking contexts that block touch events on iOS Safari */
+.panel { display: none; }
+.panel.active {
+  display: block;
+  touch-action: pan-y;         /* explicitly allow vertical touch scroll */
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ── CARDS ─────────────────────────────────────── */
@@ -1586,6 +1609,9 @@ body::after {
 </style>
 </head>
 <body>
+
+<!-- ═══ BACKGROUND TEXTURE LAYER (not a pseudo-element — avoids iOS bug) ═══ -->
+<div id="bg-layer" aria-hidden="true"></div>
 
 <!-- ═══ MOBILE NAV CONTROLS ═══ -->
 <button class="mob-hamburger" id="mob-hamburger" aria-label="Open menu" onclick="mobToggle()">
