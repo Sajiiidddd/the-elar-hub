@@ -1378,22 +1378,199 @@ body::after {
 .howto-close:hover { color: #2e3c7e; }
 
 /* RESPONSIVE */
+/* ══════════════════════════════════════════════════
+   RESPONSIVE — TABLET  (max 1024px)
+══════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
   .sidebar { width: 200px; }
   .main { margin-left: 200px; }
-  .content { padding: 28px 32px 60px; }
-  .page-header { padding: 24px 32px 20px; }
+  .content { padding: 24px 28px 60px; }
+  .page-header { padding: 20px 28px 18px; flex-wrap: wrap; gap: 14px; }
   .grid-2 { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+  .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); }
+  .pillar-grid { grid-template-columns: 1fr; }
+  .voice-grid { grid-template-columns: 1fr; }
+  .tension-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .check-grid { grid-template-columns: 1fr; }
+  .cluster-grid { grid-template-columns: 1fr; }
 }
+
+/* ══════════════════════════════════════════════════
+   MOBILE HAMBURGER OVERLAY SYSTEM
+══════════════════════════════════════════════════ */
+.mob-hamburger {
+  display: none;
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 500;
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: rgba(248,244,237,0.97);
+  border: 1px solid rgba(201,150,58,0.35);
+  box-shadow: 0 2px 12px rgba(26,18,8,0.12);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s;
+}
+.mob-hamburger span {
+  display: block;
+  width: 18px; height: 2px;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: all 0.25s ease;
+  transform-origin: center;
+}
+.mob-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.mob-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.mob-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mob-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(26,18,8,0.45);
+  z-index: 300;
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.mob-overlay.visible { opacity: 1; }
+
+/* ══════════════════════════════════════════════════
+   MOBILE  (max 768px)
+══════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .sidebar { display: none; }
+  .mob-hamburger { display: flex; }
+  .mob-overlay { display: block; }
+
+  .sidebar {
+    width: 260px;
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+    z-index: 400;
+    overflow-y: auto;
+  }
+  .sidebar.mob-open { transform: translateX(0); }
+
   .main { margin-left: 0; }
-  .kpi-grid { grid-template-columns: 1fr 1fr; }
+
+  .page-header {
+    padding: 14px 16px 14px 64px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+  }
   .header-stats { display: none; }
+  .page-title { font-size: 22px; }
+  .page-eyebrow { font-size: 9px; }
+  .page-subtitle { font-size: 11px; line-height: 1.5; }
+
+  .content { padding: 16px 14px 80px; }
+
+  .kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kpi { padding: 14px 14px; }
+  .kpi-val { font-size: 26px; }
+
+  .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 12px; }
+  .pillar-grid { grid-template-columns: 1fr; gap: 10px; }
+  .voice-grid { grid-template-columns: 1fr; gap: 10px; }
+  .tension-grid { grid-template-columns: 1fr; gap: 10px; }
+  .cluster-grid { grid-template-columns: 1fr; gap: 12px; }
+  .comp-grid { grid-template-columns: 1fr; gap: 10px; }
+  .check-grid { grid-template-columns: 1fr; }
+  .psy-grid { grid-template-columns: 1fr; gap: 10px; }
+  .ch-grid { grid-template-columns: 1fr; gap: 10px; }
+
+  .form-row { grid-template-columns: 1fr; gap: 10px; }
+  .form-actions { flex-wrap: wrap; }
+
+  .card { padding: 16px 14px; }
+
+  .sub-nav {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .sub-nav::-webkit-scrollbar { display: none; }
+  .sub-tab { font-size: 11px; padding: 7px 12px; white-space: nowrap; }
+
+  .bar-lbl { width: 90px !important; font-size: 10.5px; }
+  .bar-val { width: 48px; font-size: 10px; }
+  .bar-row { gap: 6px; }
+
+  .data-table-wrap, .priority-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .data-table, .priority-table { min-width: 560px; font-size: 11.5px; }
+  .data-table th, .priority-table th { font-size: 9.5px; padding-bottom: 8px; }
+  .data-table td, .priority-table td { padding: 9px 10px 9px 0; }
+
+  .price-map { padding: 14px 14px; }
+  .comp-lbl { width: 90px; font-size: 11px; }
+  .comp-bar { font-size: 10px; padding-left: 6px; }
+
+  .persona { flex-direction: column; gap: 10px; }
+  .persona-avatar { width: 38px; height: 38px; }
+
+  .copy-block { padding: 12px 14px; }
+  .copy-text { font-size: 14px; }
+
+  .doc-card-header { flex-direction: column; gap: 12px; }
+  .doc-card-actions { flex-wrap: wrap; gap: 6px; width: 100%; }
+  .doc-action-btn { font-size: 11px; padding: 5px 10px; }
+  .doc-iframe-wrap { height: 280px !important; }
+
+  .tier-head { flex-direction: column; gap: 8px; }
+
+  .gap-badge { font-size: 11px; padding: 8px 10px; }
+  .avoid-row { padding: 10px 12px; }
+  .section-intro { font-size: 14px; }
+  .truth-headline { font-size: 17px; }
+  .moat-body { font-size: 12.5px; }
+  .howto-banner { flex-direction: column; gap: 10px; }
+  .plat-row { flex-direction: column; gap: 6px; }
+  .plat-meta { flex-direction: column; gap: 6px; }
+  .divider { margin: 20px 0; }
+  .ask-btn { font-size: 11.5px; padding: 6px 12px; }
+  .docs-section-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .add-doc-form { padding: 16px 14px; }
+}
+
+/* ══════════════════════════════════════════════════
+   SMALL MOBILE  (max 420px)
+══════════════════════════════════════════════════ */
+@media (max-width: 420px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .kpi-val { font-size: 22px; }
+  .kpi-label { font-size: 9px; }
+  .kpi-sub { font-size: 10px; }
+  .page-title { font-size: 19px; }
+  .content { padding: 12px 12px 80px; }
+  .bar-lbl { width: 80px !important; font-size: 10px; }
+  .sidebar { width: 240px; }
+  .card { padding: 14px 12px; }
 }
 </style>
 </head>
 <body>
+
+<!-- ═══════════════════ MOBILE NAV ═══════════════════ -->
+<button class="mob-hamburger" id="mob-hamburger" onclick="toggleMobileNav()" aria-label="Open navigation">
+  <span></span><span></span><span></span>
+</button>
+<div class="mob-overlay" id="mob-overlay" onclick="closeMobileNav()"></div>
 
 <!-- ═══════════════════ SIDEBAR ═══════════════════ -->
 <aside class="sidebar">
@@ -1793,6 +1970,7 @@ body::after {
 
       <div class="sec-label">Margin architecture</div>
       <div class="card" style="margin-bottom:18px">
+        <div class="data-table-wrap">
         <table class="data-table">
           <thead><tr><th>Tier</th><th>Sell Price</th><th>Target COGS</th><th>Gross Margin (D2C)</th><th>Gross Margin (Marketplace)</th><th>Priority Metric</th></tr></thead>
           <tbody>
@@ -1802,6 +1980,7 @@ body::after {
             <tr><td class="val">Tier 4 · Limited</td><td>₹8,000–18,000</td><td>₹2,500–5,000</td><td class="good">65–72%</td><td>Not listed (D2C only)</td><td>Cultural moment + press</td></tr>
           </tbody>
         </table>
+        </div>
         <div style="font-size:12px;color:#8a7a62;margin-top:12px;line-height:1.65">COGS includes fabric, manufacturing, packaging, and logistics but excludes marketing and CAC. Target overall blended gross margin of 58–62% at D2C maturity.</div>
       </div>
 
@@ -1901,6 +2080,7 @@ body::after {
 
       <div class="sec-label">Sourcing phase plan — what to do when</div>
       <div class="card" style="margin-bottom:18px">
+        <div class="priority-table-wrap">
         <table class="priority-table">
           <thead><tr><th>Phase</th><th>Cluster / Supplier</th><th>What to Source</th><th>Why First</th><th>Timing</th></tr></thead>
           <tbody>
@@ -1912,6 +2092,7 @@ body::after {
             <tr><td><span class="pill pill-later">Phase 3</span></td><td class="tdname">Varanasi (direct master weavers)</td><td>Brocade detail pieces, festive limited drops</td><td>Highest prestige, most complex sourcing. Use sparingly — should feel like an event.</td><td>Months 12–18</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <div class="sec-label">Non-negotiable sourcing principles</div>
@@ -2241,6 +2422,8 @@ function switchPanel(id) {
       `<div class="hstat"><div class="hstat-val">${s.val}</div><div class="hstat-label">${s.label}</div></div>`
     ).join('');
   }
+  // Close mobile sidebar after navigation
+  if (window.innerWidth <= 768) closeMobileNav();
 }
 
 function switchSubTab(btn, id) {
@@ -2260,8 +2443,7 @@ function sendPrompt(text) {
 }
 
 // ─── DOCUMENTS ───────────────────────────────────────────────────────────────
-// ─── DOCUMENTS — localStorage-persisted ─────────────────────────────────────
-const STORAGE_KEY = 'elar_hub_documents_v1';
+let documents = [];
 
 const DOC_TYPES = {
   doc:    { icon: '📄', label: 'Google Doc',    cls: 'type-doc' },
@@ -2271,34 +2453,18 @@ const DOC_TYPES = {
   other:  { icon: '🔗', label: 'Link',          cls: 'type-other' }
 };
 
-// Load from localStorage on startup — survives refresh, tab close, reopening
-function loadDocuments() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch(e) {
-    return [];
-  }
-}
-
-function saveDocuments() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(documents));
-  } catch(e) {
-    console.warn('Could not save documents to localStorage:', e);
-  }
-}
-
-let documents = loadDocuments();
-
 function driveEmbedUrl(rawUrl, type) {
+  // Google Docs/Sheets/Slides: convert share link → embed link
   if (/docs\.google\.com\/(document|spreadsheets|presentation)/.test(rawUrl)) {
+    // Strip existing query params & /edit, /view etc., then add /preview or /pubhtml
     let base = rawUrl.split('?')[0].replace(/\/(edit|view|pub|preview|copy|htmlview|mobileediting)[^/]*/i, '');
     if (type === 'sheet') return base + '/htmlview?embedded=true';
     return base + '/preview';
   }
+  // Google Drive file viewer
   const fileIdMatch = rawUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
   if (fileIdMatch) return `https://drive.google.com/file/d/${fileIdMatch[1]}/preview`;
+  // Already an embed URL or other
   return rawUrl;
 }
 
@@ -2316,22 +2482,13 @@ function addDocument() {
   errEl.style.display = 'none';
   const doc = { id: Date.now(), title, type, url, desc, embedUrl: driveEmbedUrl(url, type), collapsed: false, height: 480 };
   documents.push(doc);
-  saveDocuments();       // ← persist immediately
   renderDocuments();
   clearDocForm();
   updateDocStats();
-
-  // Scroll to the new card after render
-  setTimeout(() => {
-    const card = document.getElementById('doc-card-' + doc.id);
-    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 100);
 }
 
 function removeDocument(id) {
-  if (!confirm('Remove this document from the hub?')) return;
   documents = documents.filter(d => d.id !== id);
-  saveDocuments();       // ← persist immediately
   renderDocuments();
   updateDocStats();
 }
@@ -2352,7 +2509,6 @@ function toggleDocPreview(id) {
   const doc = documents.find(d => d.id === id);
   if (!doc) return;
   doc.collapsed = !doc.collapsed;
-  saveDocuments();       // ← persist collapse state too
   const wrap = document.getElementById('doc-preview-' + id);
   const btn  = document.getElementById('toggle-btn-' + id);
   const collapsed = document.getElementById('doc-collapsed-' + id);
@@ -2365,7 +2521,6 @@ function setDocHeight(id, height) {
   const doc = documents.find(d => d.id === id);
   if (!doc) return;
   doc.height = height;
-  saveDocuments();       // ← persist height preference too
   const wrap = document.getElementById('doc-iframe-wrap-' + id);
   if (wrap) wrap.style.height = height + 'px';
   document.querySelectorAll(`#doc-size-btns-${id} .size-btn`).forEach(b => {
@@ -2375,22 +2530,22 @@ function setDocHeight(id, height) {
 
 function updateDocStats() {
   const count = documents.length;
+  // sidebar badge
   const badge = document.getElementById('doc-count-badge');
   if (badge) { badge.textContent = count; badge.style.display = count > 0 ? 'inline-block' : 'none'; }
+  // header stat
+  const hstatEl = document.querySelector('#hdr-stats .hstat-val');
+  // update count in section
   const countEl = document.getElementById('docs-section-count');
   if (countEl) countEl.textContent = count + (count === 1 ? ' document' : ' documents');
+  // update panelConfig stat so switchPanel re-renders correctly
   panelConfig.documents.stats[0].val = String(count);
-}
-
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function renderDocuments() {
   const list = document.getElementById('docs-list');
   const empty = document.getElementById('docs-empty-state');
   const sectionHeader = document.getElementById('docs-section-header');
-  if (!list) return;
 
   if (!documents.length) {
     empty.style.display = 'flex';
@@ -2405,7 +2560,6 @@ function renderDocuments() {
   list.innerHTML = documents.map(doc => {
     const t = DOC_TYPES[doc.type] || DOC_TYPES.other;
     const heights = [320, 480, 640];
-    const isCollapsed = doc.collapsed;
     return `
     <div class="doc-card ${t.cls}" id="doc-card-${doc.id}">
       <div class="doc-card-header">
@@ -2420,11 +2574,12 @@ function renderDocuments() {
           </div>
         </div>
         <div class="doc-card-actions">
-          <button class="doc-action-btn" id="toggle-btn-${doc.id}" onclick="toggleDocPreview(${doc.id})">${isCollapsed ? 'Show Preview' : 'Hide Preview'}</button>
+          <button class="doc-action-btn" id="toggle-btn-${doc.id}" onclick="toggleDocPreview(${doc.id})">Hide Preview</button>
           <a class="doc-action-btn primary-action" href="${escHtml(doc.url)}" target="_blank" rel="noopener">Open ↗</a>
           <button class="doc-action-btn danger" onclick="removeDocument(${doc.id})" title="Remove">✕</button>
         </div>
       </div>
+
       <div class="doc-preview-area">
         <div class="doc-preview-bar">
           <span class="doc-preview-label">Live Preview</span>
@@ -2432,7 +2587,8 @@ function renderDocuments() {
             ${heights.map(h => `<button class="size-btn${h===doc.height?' active':''}" data-h="${h}" onclick="setDocHeight(${doc.id},${h})">${h===320?'Small':h===480?'Medium':'Large'}</button>`).join('')}
           </div>
         </div>
-        <div id="doc-preview-${doc.id}" style="display:${isCollapsed?'none':'block'}">
+
+        <div id="doc-preview-${doc.id}">
           <div class="doc-iframe-wrap" id="doc-iframe-wrap-${doc.id}" style="height:${doc.height}px">
             <div class="doc-iframe-loading" id="doc-loading-${doc.id}">
               <div class="loading-spinner"></div>
@@ -2446,7 +2602,8 @@ function renderDocuments() {
             ></iframe>
           </div>
         </div>
-        <div class="doc-preview-collapsed" id="doc-collapsed-${doc.id}" style="display:${isCollapsed?'flex':'none'}">
+
+        <div class="doc-preview-collapsed" id="doc-collapsed-${doc.id}" style="display:none">
           <span class="collapsed-hint">Preview hidden — click "Show Preview" to expand</span>
           <a class="doc-action-btn" href="${escHtml(doc.url)}" target="_blank" rel="noopener" style="margin-top:0">Open in Drive ↗</a>
         </div>
@@ -2455,11 +2612,38 @@ function renderDocuments() {
   }).join('');
 }
 
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── MOBILE NAV ──────────────────────────────────────────────────────────────
+function toggleMobileNav() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('mob-overlay');
+  const btn = document.getElementById('mob-hamburger');
+  const isOpen = sidebar.classList.contains('mob-open');
+  if (isOpen) {
+    closeMobileNav();
+  } else {
+    sidebar.classList.add('mob-open');
+    overlay.classList.add('visible');
+    btn.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeMobileNav() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('mob-overlay');
+  const btn = document.getElementById('mob-hamburger');
+  sidebar.classList.remove('mob-open');
+  overlay.classList.remove('visible');
+  btn.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 // ─── INIT ───────────────────────────────────────────────────────────────────
 buildAll();
-// Restore saved documents on every page load
-renderDocuments();
-updateDocStats();
 setTimeout(() => animateBars(document.getElementById('panel-market')), 120);
 </script>
 </body>
