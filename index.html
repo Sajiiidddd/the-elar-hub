@@ -2710,16 +2710,11 @@ switchPanel = function(id) {
 };
 
 // ─── INIT ───────────────────────────────────────────────────────────────────
-// ─── INIT ───────────────────────────────────────────────────────────────────
 buildAll();
+// Restore saved documents on every load
 renderDocuments();
 updateDocStats();
-
-// Use an arrow function to ensure no string evaluation occurs
-setTimeout(() => {
-  const activePanel = document.querySelector('.panel.active');
-  if (activePanel) animateBars(activePanel);
-}, 100);
+setTimeout(() => animateBars(document.getElementById('panel-market')), 120);
 </script>
 </body>
 </html>
