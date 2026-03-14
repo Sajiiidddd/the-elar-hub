@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta http-equiv="Content-Security-Policy" content="script-src 'self' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com;">
+<meta http-equiv="Content-Security-Policy" content="script-src 'self'; object-src 'none';">
 <title>The Elar — Brand Intelligence Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -258,7 +260,6 @@ body::before, body::after { content: none; }
   background: rgba(248,244,237,0.98);
 }
 
-.page-title-area {}
 .page-eyebrow {
   font-size: 10px;
   font-weight: 500;
@@ -2711,11 +2712,16 @@ switchPanel = function(id) {
 };
 
 // ─── INIT ───────────────────────────────────────────────────────────────────
+// ─── INIT ───────────────────────────────────────────────────────────────────
 buildAll();
-// Restore saved documents on every load
 renderDocuments();
 updateDocStats();
-setTimeout(() => animateBars(document.getElementById('panel-market')), 120);
+
+// Use an arrow function to ensure no string evaluation occurs
+setTimeout(() => {
+  const activePanel = document.querySelector('.panel.active');
+  if (activePanel) animateBars(activePanel);
+}, 100);
 </script>
 </body>
 </html>
