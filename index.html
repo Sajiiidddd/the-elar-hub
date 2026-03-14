@@ -161,11 +161,20 @@ body::before, body::after { content: none; }
   color: #7a6a52;
   font-size: 13px;
   font-weight: 400;
+  font-family: 'Outfit', sans-serif;
   transition: all var(--transition);
   margin-bottom: 2px;
   position: relative;
   border: 1px solid transparent;
   user-select: none;
+  width: 100%;
+  text-align: left;
+  background: none;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: rgba(201,150,58,0.2);
+  touch-action: manipulation;
 }
 .nav-item:hover {
   background: rgba(201,150,58,0.07);
@@ -587,6 +596,14 @@ body::before, body::after { content: none; }
   cursor: pointer;
   background: var(--card);
   transition: all var(--transition);
+  width: 100%;
+  text-align: left;
+  font-family: 'Outfit', sans-serif;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  -webkit-tap-highlight-color: rgba(201,150,58,0.2);
+  touch-action: manipulation;
 }
 .persona:hover { background: var(--card-hover); border-color: var(--border-med); box-shadow: var(--shadow); }
 .persona-avatar {
@@ -815,6 +832,15 @@ body::before, body::after { content: none; }
   cursor: pointer;
   transition: all var(--transition);
   background: var(--card);
+  width: 100%;
+  text-align: left;
+  font-family: 'Outfit', sans-serif;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  padding: 0;
+  -webkit-tap-highlight-color: rgba(201,150,58,0.2);
+  touch-action: manipulation;
 }
 .cluster-card:hover { box-shadow: var(--shadow-hover); border-color: var(--border-med); transform: translateY(-1px); }
 .cluster-head { padding: 14px 18px 12px; }
@@ -848,6 +874,14 @@ body::before, body::after { content: none; }
   cursor: pointer;
   background: var(--card);
   transition: all var(--transition);
+  width: 100%;
+  text-align: left;
+  font-family: 'Outfit', sans-serif;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  -webkit-tap-highlight-color: rgba(201,150,58,0.2);
+  touch-action: manipulation;
 }
 .plat-card:hover { background: var(--card-hover); box-shadow: var(--shadow); border-color: var(--border-med); }
 .plat-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
@@ -1616,7 +1650,7 @@ body::before, body::after { content: none; }
 <button class="mob-hamburger" id="mob-hamburger" aria-label="Open menu" onclick="mobToggle()">
   <span></span><span></span><span></span>
 </button>
-<div class="mob-overlay" id="mob-overlay" onclick="mobClose()"></div>
+<div class="mob-overlay" id="mob-overlay" onclick="mobClose()" role="button" aria-label="Close menu"></div>
 
 <!-- ═══════════════════ SIDEBAR ═══════════════════ -->
 <aside class="sidebar" id="sidebar">
@@ -1628,36 +1662,36 @@ body::before, body::after { content: none; }
 
   <div class="nav-section">
     <div class="nav-section-label">Research</div>
-    <div class="nav-item active" data-panel="market" onclick="switchPanel('market')">
-      <div class="nav-icon">📊</div>
+    <button class="nav-item active" data-panel="market" onclick="switchPanel('market')">
+      <div class="nav-icon">📊</button>
       Market Brief
     </div>
-    <div class="nav-item" data-panel="competitive" onclick="switchPanel('competitive')">
-      <div class="nav-icon">🏪</div>
+    <button class="nav-item" data-panel="competitive" onclick="switchPanel('competitive')">
+      <div class="nav-icon">🏪</button>
       Competitive Data
     </div>
   </div>
 
   <div class="nav-section" style="margin-top:8px">
     <div class="nav-section-label">Strategy</div>
-    <div class="nav-item" data-panel="brand" onclick="switchPanel('brand')">
-      <div class="nav-icon">✦</div>
+    <button class="nav-item" data-panel="brand" onclick="switchPanel('brand')">
+      <div class="nav-icon">✦</button>
       Brand Story
     </div>
-    <div class="nav-item" data-panel="pricing" onclick="switchPanel('pricing')">
-      <div class="nav-icon">₹</div>
+    <button class="nav-item" data-panel="pricing" onclick="switchPanel('pricing')">
+      <div class="nav-icon">₹</button>
       Pricing Framework
     </div>
-    <div class="nav-item" data-panel="sourcing" onclick="switchPanel('sourcing')">
-      <div class="nav-icon">🧵</div>
+    <button class="nav-item" data-panel="sourcing" onclick="switchPanel('sourcing')">
+      <div class="nav-icon">🧵</button>
       Textile Sourcing
     </div>
   </div>
 
   <div class="nav-section" style="margin-top:8px">
     <div class="nav-section-label">Documents</div>
-    <div class="nav-item" data-panel="documents" onclick="switchPanel('documents')">
-      <div class="nav-icon">📁</div>
+    <button class="nav-item" data-panel="documents" onclick="switchPanel('documents')">
+      <div class="nav-icon">📁</button>
       <span>Drive Files</span>
       <span id="doc-count-badge" style="margin-left:auto;background:rgba(201,150,58,0.15);color:var(--gold-dim);font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;display:none">0</span>
     </div>
@@ -1901,38 +1935,38 @@ body::before, body::after { content: none; }
       <div class="divider"></div>
 
       <div class="sec-label">Four Gen Z personas The Elar speaks to</div>
-      <div class="persona" onclick="sendPrompt('Build a detailed marketing brief for The Elar targeting the Culturally Proud persona')">
+      <button class="persona" onclick="sendPrompt('Build a detailed marketing brief for The Elar targeting the Culturally Proud persona')">
         <div class="persona-avatar av-1">CP</div>
         <div>
           <div class="persona-name">The Culturally Proud</div>
           <div class="persona-desc">21, Delhi or Jaipur. Wears handloom and knows the weave origin. Follows Indian craft accounts, not just fashion ones. Wants premium Indianness — not kitsch, not costume.</div>
           <div><span class="tag tp">Handloom-curious</span><span class="tag tp">Craft storytelling</span><span class="tag tp">Anti-fast fashion</span></div>
         </div>
-      </div>
-      <div class="persona" onclick="sendPrompt('Build a detailed marketing brief for The Elar targeting the Quiet Achiever persona')">
+      </button>
+      <button class="persona" onclick="sendPrompt('Build a detailed marketing brief for The Elar targeting the Quiet Achiever persona')">
         <div class="persona-avatar av-2">QA</div>
         <div>
           <div class="persona-name">The Quiet Achiever</div>
           <div class="persona-desc">22, Mumbai or Bengaluru. Internship at a startup, subtly ambitious. Allergic to logos. Drawn to minimal, structured pieces that signal taste without trying too hard.</div>
           <div><span class="tag ts">Quiet luxury</span><span class="tag ts">Everyday premium</span><span class="tag ts">Office-to-evening</span></div>
         </div>
-      </div>
-      <div class="persona" onclick="sendPrompt('Build a detailed marketing brief for The Elar targeting the Festival Fusionist persona')">
+      </button>
+      <button class="persona" onclick="sendPrompt('Build a detailed marketing brief for The Elar targeting the Festival Fusionist persona')">
         <div class="persona-avatar av-3">FF</div>
         <div>
           <div class="persona-name">The Festival Fusionist</div>
           <div class="persona-desc">19, Pune or Hyderabad. Dresses for Diwali in a way that's Instagram-worthy but not overdone. Loves the fusion moment — saree drape with a blazer, kurta over cargo pants.</div>
           <div><span class="tag ta">Indo-western fusion</span><span class="tag ta">Occasion wear</span><span class="tag ta">Camera-ready</span></div>
         </div>
-      </div>
-      <div class="persona" onclick="sendPrompt('Build a detailed marketing brief for The Elar targeting the Tier 2 Aspirant persona')">
+      </button>
+      <button class="persona" onclick="sendPrompt('Build a detailed marketing brief for The Elar targeting the Tier 2 Aspirant persona')">
         <div class="persona-avatar av-4">TA</div>
         <div>
           <div class="persona-name">The Tier 2 Aspirant</div>
           <div class="persona-desc">20, Indore, Surat, or Lucknow. Sharp, style-conscious, underserved by premium labels. Wants a brand that doesn't feel made for Delhi South only.</div>
           <div><span class="tag tc">Regional pride</span><span class="tag tc">D2C discovery</span><span class="tag tc">Accessible premium</span></div>
         </div>
-      </div>
+      </button>
 
       <div class="divider"></div>
 
@@ -2069,56 +2103,56 @@ body::before, body::after { content: none; }
 
       <div class="sec-label">India's six most important textile clusters for The Elar</div>
       <div class="grid-2">
-        <div class="cluster-card cl-1" onclick="sendPrompt('Tell me more about Bhagalpur as a sourcing destination — who to contact, what to expect, and how to work with weavers there for The Elar')">
+        <button class="cluster-card cl-1" onclick="sendPrompt('Tell me more about Bhagalpur as a sourcing destination — who to contact, what to expect, and how to work with weavers there for The Elar')">
           <div class="cluster-head"><div class="cluster-region">Bihar — East India</div><div class="cluster-name">Bhagalpur</div><div class="cluster-sub">Silk City · Tussar, Linen, Matka silk</div></div>
           <div class="cluster-body"><div class="cluster-desc">Known as "Silk City," Bhagalpur has 30,000+ artisans and 25,000 handlooms. Produces India's finest Tussar (wild silk) with natural, earthy texture. The fabric already appeared in The Elar's brand copy — it must appear in the product too.</div><span class="tag ta">Tussar silk</span><span class="tag ta">Bhagalpuri linen</span><span class="tag ta">Matka silk</span><span class="tag ta">Natural dye-ready</span></div>
-        </div>
-        <div class="cluster-card cl-2" onclick="sendPrompt('Tell me more about Chanderi and Maheshwar as sourcing clusters for a premium D2C brand')">
+        </button>
+        <button class="cluster-card cl-2" onclick="sendPrompt('Tell me more about Chanderi and Maheshwar as sourcing clusters for a premium D2C brand')">
           <div class="cluster-head"><div class="cluster-region">Madhya Pradesh — Central India</div><div class="cluster-name">Chanderi & Maheshwar</div><div class="cluster-sub">Sheer cotton-silk blends · Lightweight luxury</div></div>
           <div class="cluster-body"><div class="cluster-desc">Two adjacent clusters producing India's most sought-after sheer fabrics. Chanderi is a translucent cotton-silk-zari weave, luminous and lightweight. Maheshwari is a reversible cotton-silk blend. Both are GI-tagged with instant cultural recognition among Gen Z who follow Indian fashion.</div><span class="tag tp">Chanderi silk-cotton</span><span class="tag tp">Maheshwari weave</span><span class="tag tp">GI-tagged</span><span class="tag tp">Fusion-ready</span></div>
-        </div>
-        <div class="cluster-card cl-3" onclick="sendPrompt('How should The Elar work with Jaipur block print artisans — direct sourcing vs aggregator?')">
+        </button>
+        <button class="cluster-card cl-3" onclick="sendPrompt('How should The Elar work with Jaipur block print artisans — direct sourcing vs aggregator?')">
           <div class="cluster-head"><div class="cluster-region">Rajasthan — Northwest India</div><div class="cluster-name">Jaipur</div><div class="cluster-sub">Block print capital · Bagru, Sanganeri, Dabu</div></div>
           <div class="cluster-body"><div class="cluster-desc">India's block print hub. Bagru and Sanganer villages produce the most globally recognised Indian surface prints. Dabu mud-resist printing, indigo work, and ajrakh also available nearby. Ideal for The Elar's surface design language — prints on contemporary silhouettes are exactly the cultural fusion the brand stands for.</div><span class="tag tc">Bagru block print</span><span class="tag tc">Natural indigo</span><span class="tag tc">Dabu resist</span><span class="tag tc">Low MOQ available</span></div>
-        </div>
-        <div class="cluster-card cl-4" onclick="sendPrompt('What makes Pochampally Ikat special and how can The Elar incorporate it into a Gen Z-friendly premium collection?')">
+        </button>
+        <button class="cluster-card cl-4" onclick="sendPrompt('What makes Pochampally Ikat special and how can The Elar incorporate it into a Gen Z-friendly premium collection?')">
           <div class="cluster-head"><div class="cluster-region">Telangana — South India</div><div class="cluster-name">Pochampally</div><div class="cluster-sub">Ikat weaving · Geometric patterns</div></div>
           <div class="cluster-body"><div class="cluster-desc">Home of India's most striking geometric ikat weaves. Pochampally ikat uses resist-dyeing yarn before weaving — creating slightly blurred, intensely graphic patterns that are inherently premium-looking. GI-tagged. Works exceptionally well in shirts, dupattas, and co-ord sets.</div><span class="tag ts">Pochampally ikat</span><span class="tag ts">GI-tagged</span><span class="tag ts">Geometric weave</span><span class="tag ts">Contemporary recolour</span></div>
-        </div>
-        <div class="cluster-card cl-5" onclick="sendPrompt('How can The Elar use Banarasi textile craft in its signature tier without it feeling like bridal wear?')">
+        </button>
+        <button class="cluster-card cl-5" onclick="sendPrompt('How can The Elar use Banarasi textile craft in its signature tier without it feeling like bridal wear?')">
           <div class="cluster-head"><div class="cluster-region">Uttar Pradesh — North India</div><div class="cluster-name">Varanasi (Banaras)</div><div class="cluster-sub">Banarasi brocade · Zari weaving · Silk</div></div>
           <div class="cluster-body"><div class="cluster-desc">The most prestigious Indian textile tradition. Banarasi silk features intricate zari brocade with Persian-Mughal motifs. Typically bridal — but that's precisely the opportunity. Used sparingly in structured blazers or limited drops, Banarasi becomes subversively luxurious. Reserve for Tier 3 and Tier 4 only.</div><span class="tag" style="background:#F7C1C1;color:#A32D2D">Banarasi brocade</span><span class="tag" style="background:#F7C1C1;color:#A32D2D">Zari work</span><span class="tag" style="background:#F7C1C1;color:#A32D2D">Signature tier only</span></div>
-        </div>
-        <div class="cluster-card cl-6" onclick="sendPrompt('How can The Elar source Kutch embroidery authentically — what artisan organisations should we approach?')">
+        </button>
+        <button class="cluster-card cl-6" onclick="sendPrompt('How can The Elar source Kutch embroidery authentically — what artisan organisations should we approach?')">
           <div class="cluster-head"><div class="cluster-region">Gujarat — West India</div><div class="cluster-name">Kutch</div><div class="cluster-sub">Embroidery · Mirror work · Bandhani</div></div>
           <div class="cluster-body"><div class="cluster-desc">India's embroidery capital — home to 12+ distinct styles (Rabari, Ahir, Suf, Shisha mirror work). Working directly with Kutch cooperatives (Khamir, Qasab) gives The Elar both authentic craft access and compelling brand storytelling about the artisan communities involved.</div><span class="tag tg">Kutch embroidery</span><span class="tag tg">Mirror shisha work</span><span class="tag tg">Bandhani</span><span class="tag tg">Cooperative sourcing</span></div>
-        </div>
+        </button>
       </div>
       <button class="ask-btn" onclick="sendPrompt('Build a 3-cluster sourcing plan for The Elar for Year 1 — which clusters to prioritise, in what order, and why')">Build Year 1 cluster plan</button>
 
       <div class="divider"></div>
 
       <div class="sec-label">Supplier platforms — who to work with at each stage</div>
-      <div class="plat-card" onclick="sendPrompt('How should The Elar get started with Fabriclore — what fabrics to sample and how to structure a first order?')">
+      <button class="plat-card" onclick="sendPrompt('How should The Elar get started with Fabriclore — what fabrics to sample and how to structure a first order?')">
         <div class="plat-row"><div class="plat-name">Fabriclore</div><span class="plat-type pt-platform">B2B platform</span></div>
         <div class="plat-desc">India's leading B2B fabric sourcing platform, trusted by 400+ D2C fashion brands. Digital printing, screen printing, hand block printing, and custom dyeing — all under one roof. Ideal for the launch phase. Strong for linen, cotton, silk blends, and custom-printed fabrics.</div>
         <div class="plat-meta"><span><strong>MOQ:</strong> 50–300m</span><span><strong>Lead time:</strong> 15–30 days</span><span><strong>Best for:</strong> Core tier, printed fabrics, sampling</span></div>
-      </div>
-      <div class="plat-card" onclick="sendPrompt('Tell me more about Anuprerna as a sourcing partner and how The Elar should approach them')">
+      </button>
+      <button class="plat-card" onclick="sendPrompt('Tell me more about Anuprerna as a sourcing partner and how The Elar should approach them')">
         <div class="plat-row"><div class="plat-name">Anuprerna</div><span class="plat-type pt-direct">Artisan manufacturer</span></div>
         <div class="plat-desc">East India–based artisan manufacturer working with 300+ skilled weavers. Specialises in handloom fabrics — khadi, cotton, linen, hemp, bamboo, mulberry silk, matka silk. Low MOQs for an artisan operation. Strong ethical sourcing credentials for brand storytelling.</div>
         <div class="plat-meta"><span><strong>MOQ:</strong> Low (custom basis)</span><span><strong>Lead time:</strong> 3–6 weeks</span><span><strong>Best for:</strong> Handloom fabrics, artisan content, signature tier</span></div>
-      </div>
-      <div class="plat-card" onclick="sendPrompt('How should The Elar approach direct sourcing from weaver cooperatives — what organisations exist in India?')">
+      </button>
+      <button class="plat-card" onclick="sendPrompt('How should The Elar approach direct sourcing from weaver cooperatives — what organisations exist in India?')">
         <div class="plat-row"><div class="plat-name">Direct Weaver Cooperatives</div><span class="plat-type pt-direct">Direct sourcing</span></div>
         <div class="plat-desc">For signature and limited drop tiers, direct cooperative relationships unlock the most authentic craft and best margin. Key orgs: Khamir (Kutch), Dastkar (6000+ artisans nationwide), NID Craft Documentation Unit. Essential for premium positioning — requires in-person visits.</div>
         <div class="plat-meta"><span><strong>MOQ:</strong> Negotiable, often very low</span><span><strong>Lead time:</strong> 4–12 weeks</span><span><strong>Best for:</strong> Signature tier, limited drops, brand storytelling</span></div>
-      </div>
-      <div class="plat-card" onclick="sendPrompt('What is iTokri and how can The Elar use it as a sampling resource for Indian handloom fabrics?')">
+      </button>
+      <button class="plat-card" onclick="sendPrompt('What is iTokri and how can The Elar use it as a sampling resource for Indian handloom fabrics?')">
         <div class="plat-row"><div class="plat-name">iTokri</div><span class="plat-type pt-platform">Discovery + sampling</span></div>
         <div class="plat-desc">India's most comprehensive handloom fabric discovery marketplace — 40+ regional craft traditions in one place: Ajrakh, Jamdani, Chanderi, Ikat, Kantha, Kalamkari, Banarasi and more. Use as a swatch and sampling resource before committing to a direct cluster relationship.</div>
         <div class="plat-meta"><span><strong>Use for:</strong> Sampling, design research</span><span><strong>Not for:</strong> Bulk manufacturing</span><span><strong>Value:</strong> 40+ craft traditions in one place</span></div>
-      </div>
+      </button>
 
       <div class="divider"></div>
 
@@ -2460,20 +2494,20 @@ function switchPanel(id) {
     document.getElementById('hdr-eyebrow').textContent = cfg.eyebrow;
     document.getElementById('hdr-title').innerHTML = cfg.title;
     document.getElementById('hdr-subtitle').textContent = cfg.subtitle;
-    document.getElementById('hdr-stats').innerHTML = cfg.stats.map(s =>
-      `<div class="hstat"><div class="hstat-val">${s.val}</div><div class="hstat-label">${s.label}</div></div>`
-    ).join('');
+    document.getElementById('hdr-stats').innerHTML = cfg.stats.map(function(s) {
+      return '<div class="hstat"><div class="hstat-val">' + s.val + '</div><div class="hstat-label">' + s.label + '</div></div>';
+    }).join('');
   }
 }
 
 function switchSubTab(btn, id) {
-  const subNav = btn.closest('.sub-nav');
-  subNav.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  var subNav = btn.closest('.sub-nav');
+  subNav.querySelectorAll('.sub-tab').forEach(function(t) { t.classList.remove('active'); });
   btn.classList.add('active');
-  const panel = btn.closest('.panel');
-  panel.querySelectorAll('.sub-panel').forEach(p => { p.style.display='none'; p.classList.remove('active'); });
-  const target = document.getElementById(id);
-  if (target) { target.style.display='block'; target.classList.add('active'); setTimeout(()=>animateBars(target),50); }
+  var panel = btn.closest('.panel');
+  panel.querySelectorAll('.sub-panel').forEach(function(p) { p.style.display='none'; p.classList.remove('active'); });
+  var target = document.getElementById(id);
+  if (target) { target.style.display='block'; target.classList.add('active'); setTimeout(function() { animateBars(target); }, 50); }
 }
 
 function sendPrompt(text) {
@@ -2702,12 +2736,7 @@ function mobClose() {
   btn.classList.remove('is-open');
 }
 
-// Patch switchPanel to close sidebar on mobile after navigation
-const _sp = switchPanel;
-switchPanel = function(id) {
-  _sp(id);
-  if (window.innerWidth <= 768) mobClose();
-};
+// Mobile close on navigation is handled inside switchPanel directly
 
 // ─── INIT ───────────────────────────────────────────────────────────────────
 buildAll();
