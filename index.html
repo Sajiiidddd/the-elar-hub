@@ -34,15 +34,18 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
 
 body {
   font-family: 'Outfit', sans-serif;
   background: var(--cream);
   color: var(--ink);
   min-height: 100vh;
-  overflow-x: hidden;
   font-size: 14px;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* TEXTURE LAYERS */
@@ -1377,10 +1380,7 @@ body::after {
 .howto-close { font-size: 16px; color: #8a9acc; cursor: pointer; flex-shrink: 0; margin-left: auto; line-height: 1; padding: 2px; }
 .howto-close:hover { color: #2e3c7e; }
 
-/* RESPONSIVE */
-/* ══════════════════════════════════════════════════
-   RESPONSIVE — TABLET  (max 1024px)
-══════════════════════════════════════════════════ */
+/* ── TABLET (≤1024px) ───────────────────────────── */
 @media (max-width: 1024px) {
   .sidebar { width: 200px; }
   .main { margin-left: 200px; }
@@ -1388,7 +1388,6 @@ body::after {
   .page-header { padding: 20px 28px 18px; flex-wrap: wrap; gap: 14px; }
   .grid-2 { grid-template-columns: 1fr; }
   .grid-3 { grid-template-columns: 1fr 1fr; }
-  .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); }
   .pillar-grid { grid-template-columns: 1fr; }
   .voice-grid { grid-template-columns: 1fr; }
   .tension-grid { grid-template-columns: 1fr; }
@@ -1397,183 +1396,205 @@ body::after {
   .cluster-grid { grid-template-columns: 1fr; }
 }
 
-/* ══════════════════════════════════════════════════
-   MOBILE HAMBURGER OVERLAY SYSTEM
-══════════════════════════════════════════════════ */
+/* ── HAMBURGER BUTTON (hidden on desktop) ─────── */
 .mob-hamburger {
   display: none;
   position: fixed;
-  top: 14px;
-  left: 14px;
-  z-index: 500;
-  width: 40px; height: 40px;
+  top: 12px; left: 12px;
+  z-index: 9999;
+  width: 42px; height: 42px;
   border-radius: 10px;
-  background: rgba(248,244,237,0.97);
-  border: 1px solid rgba(201,150,58,0.35);
-  box-shadow: 0 2px 12px rgba(26,18,8,0.12);
+  background: rgba(248,244,237,0.96);
+  border: 1.5px solid rgba(201,150,58,0.4);
+  box-shadow: 0 2px 16px rgba(26,18,8,0.15);
   cursor: pointer;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
   gap: 5px;
-  padding: 10px;
-  backdrop-filter: blur(8px);
-  transition: background 0.2s;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 .mob-hamburger span {
   display: block;
   width: 18px; height: 2px;
-  background: var(--ink);
+  background: #1a1208;
   border-radius: 2px;
-  transition: all 0.25s ease;
-  transform-origin: center;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+  pointer-events: none;
 }
-.mob-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.mob-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.mob-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.mob-hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.mob-hamburger.is-open span:nth-child(2) { opacity: 0; }
+.mob-hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+/* ── DARK OVERLAY ─────────────────────────────── */
 .mob-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(26,18,8,0.45);
-  z-index: 300;
-  backdrop-filter: blur(2px);
+  background: rgba(26,18,8,0.5);
+  z-index: 9000;
   opacity: 0;
   transition: opacity 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
-.mob-overlay.visible { opacity: 1; }
+.mob-overlay.is-visible { opacity: 1; }
 
-/* ══════════════════════════════════════════════════
-   MOBILE  (max 768px)
-══════════════════════════════════════════════════ */
+/* ── MOBILE (≤768px) ─────────────────────────── */
 @media (max-width: 768px) {
-  .mob-hamburger { display: flex; }
-  .mob-overlay { display: block; }
 
+  /* Show hamburger */
+  .mob-hamburger { display: flex; }
+  .mob-overlay   { display: block; }
+
+  /* Sidebar: off-screen by default, slides in */
   .sidebar {
-    width: 260px;
     transform: translateX(-100%);
     transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
-    z-index: 400;
+    z-index: 9500;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 260px;
   }
-  .sidebar.mob-open { transform: translateX(0); }
+  .sidebar.is-open { transform: translateX(0); }
 
-  .main { margin-left: 0; }
+  /* Main content: full width, MUST be scrollable */
+  .main {
+    margin-left: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Critical: without this iOS won't scroll */
+    position: relative;
+  }
 
+  /* Page header */
   .page-header {
-    padding: 14px 16px 14px 64px;
+    padding: 14px 16px 12px 62px;
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 6px;
     position: sticky;
     top: 0;
+    z-index: 100;
   }
   .header-stats { display: none; }
-  .page-title { font-size: 22px; }
-  .page-eyebrow { font-size: 9px; }
+  .page-title { font-size: 21px; }
+  .page-eyebrow { font-size: 9px; margin-bottom: 2px; }
   .page-subtitle { font-size: 11px; line-height: 1.5; }
 
+  /* Content */
   .content { padding: 16px 14px 80px; }
 
+  /* KPI */
   .kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .kpi { padding: 14px 14px; }
-  .kpi-val { font-size: 26px; }
+  .kpi { padding: 13px 12px; }
+  .kpi-val { font-size: 24px; }
+  .kpi-label { font-size: 9.5px; }
+  .kpi-sub { font-size: 10.5px; }
 
-  .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 12px; }
-  .pillar-grid { grid-template-columns: 1fr; gap: 10px; }
-  .voice-grid { grid-template-columns: 1fr; gap: 10px; }
-  .tension-grid { grid-template-columns: 1fr; gap: 10px; }
-  .cluster-grid { grid-template-columns: 1fr; gap: 12px; }
-  .comp-grid { grid-template-columns: 1fr; gap: 10px; }
-  .check-grid { grid-template-columns: 1fr; }
-  .psy-grid { grid-template-columns: 1fr; gap: 10px; }
-  .ch-grid { grid-template-columns: 1fr; gap: 10px; }
-
+  /* All multi-col grids → 1 col */
+  .grid-2, .grid-3,
+  .pillar-grid, .voice-grid,
+  .tension-grid, .cluster-grid,
+  .comp-grid, .psy-grid, .ch-grid { grid-template-columns: 1fr; gap: 12px; }
+  .check-grid { grid-template-columns: 1fr; gap: 8px; }
   .form-row { grid-template-columns: 1fr; gap: 10px; }
   .form-actions { flex-wrap: wrap; }
 
-  .card { padding: 16px 14px; }
+  /* Cards */
+  .card { padding: 15px 13px; }
 
+  /* Sub-nav tabs: horizontally scrollable */
   .sub-nav {
     width: 100%;
     overflow-x: auto;
+    overflow-y: visible;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    flex-wrap: nowrap;
   }
   .sub-nav::-webkit-scrollbar { display: none; }
-  .sub-tab { font-size: 11px; padding: 7px 12px; white-space: nowrap; }
+  .sub-tab { font-size: 11.5px; padding: 7px 13px; white-space: nowrap; }
 
-  .bar-lbl { width: 90px !important; font-size: 10.5px; }
-  .bar-val { width: 48px; font-size: 10px; }
-  .bar-row { gap: 6px; }
+  /* Bar chart labels */
+  .bar-lbl { width: 88px !important; font-size: 10.5px !important; }
+  .bar-val  { width: 46px; font-size: 10px; }
+  .bar-row  { gap: 6px; margin-bottom: 6px; }
 
-  .data-table-wrap, .priority-table-wrap {
+  /* Tables: wrap in scrollable container */
+  .data-table-wrap,
+  .priority-table-wrap {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    border-radius: var(--r);
   }
-  .data-table, .priority-table { min-width: 560px; font-size: 11.5px; }
-  .data-table th, .priority-table th { font-size: 9.5px; padding-bottom: 8px; }
-  .data-table td, .priority-table td { padding: 9px 10px 9px 0; }
+  .data-table,
+  .priority-table { min-width: 580px; font-size: 11.5px; }
 
-  .price-map { padding: 14px 14px; }
-  .comp-lbl { width: 90px; font-size: 11px; }
-  .comp-bar { font-size: 10px; padding-left: 6px; }
+  /* Price map */
+  .price-map { padding: 14px 12px; }
+  .comp-lbl  { width: 88px; font-size: 10.5px; }
+  .comp-bar  { font-size: 9.5px; padding-left: 5px; }
 
-  .persona { flex-direction: column; gap: 10px; }
-  .persona-avatar { width: 38px; height: 38px; }
+  /* Personas */
+  .persona { flex-direction: column; gap: 10px; align-items: flex-start; }
 
-  .copy-block { padding: 12px 14px; }
-  .copy-text { font-size: 14px; }
+  /* Copy blocks */
+  .copy-block { padding: 12px 13px; }
+  .copy-text  { font-size: 14px; }
 
-  .doc-card-header { flex-direction: column; gap: 12px; }
-  .doc-card-actions { flex-wrap: wrap; gap: 6px; width: 100%; }
-  .doc-action-btn { font-size: 11px; padding: 5px 10px; }
-  .doc-iframe-wrap { height: 280px !important; }
+  /* Arc */
+  .arc-step { gap: 11px; }
 
+  /* Tier cards */
   .tier-head { flex-direction: column; gap: 8px; }
 
-  .gap-badge { font-size: 11px; padding: 8px 10px; }
-  .avoid-row { padding: 10px 12px; }
+  /* Doc cards */
+  .doc-card-header { flex-direction: column; gap: 10px; }
+  .doc-card-actions { flex-wrap: wrap; gap: 6px; width: 100%; }
+  .doc-action-btn { font-size: 11px; padding: 6px 10px; }
+  .doc-iframe-wrap { height: 300px !important; }
+
+  /* Misc */
+  .gap-badge { font-size: 11px; padding: 7px 10px; }
+  .avoid-row { padding: 10px 11px; }
   .section-intro { font-size: 14px; }
   .truth-headline { font-size: 17px; }
-  .moat-body { font-size: 12.5px; }
   .howto-banner { flex-direction: column; gap: 10px; }
-  .plat-row { flex-direction: column; gap: 6px; }
-  .plat-meta { flex-direction: column; gap: 6px; }
-  .divider { margin: 20px 0; }
-  .ask-btn { font-size: 11.5px; padding: 6px 12px; }
+  .plat-row { flex-direction: column; gap: 5px; }
+  .plat-meta { flex-direction: column; gap: 5px; }
   .docs-section-header { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .add-doc-form { padding: 16px 14px; }
+  .add-doc-form { padding: 16px 13px; }
+  .divider { margin: 18px 0; }
+  .ask-btn { font-size: 11.5px; padding: 6px 11px; }
+  .elar-zone { font-size: 12px; padding: 9px 12px; }
 }
 
-/* ══════════════════════════════════════════════════
-   SMALL MOBILE  (max 420px)
-══════════════════════════════════════════════════ */
+/* ── SMALL MOBILE (≤420px) ───────────────────── */
 @media (max-width: 420px) {
   .kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .kpi-val { font-size: 22px; }
-  .kpi-label { font-size: 9px; }
-  .kpi-sub { font-size: 10px; }
-  .page-title { font-size: 19px; }
-  .content { padding: 12px 12px 80px; }
-  .bar-lbl { width: 80px !important; font-size: 10px; }
-  .sidebar { width: 240px; }
-  .card { padding: 14px 12px; }
+  .kpi-val  { font-size: 20px; }
+  .page-title { font-size: 18px; }
+  .content  { padding: 12px 11px 80px; }
+  .bar-lbl  { width: 76px !important; font-size: 10px !important; }
+  .sidebar  { width: 240px; }
+  .card     { padding: 13px 11px; }
+  .sub-tab  { font-size: 10.5px; padding: 6px 11px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════ MOBILE NAV ═══════════════════ -->
-<button class="mob-hamburger" id="mob-hamburger" onclick="toggleMobileNav()" aria-label="Open navigation">
+<!-- ═══ MOBILE NAV CONTROLS ═══ -->
+<button class="mob-hamburger" id="mob-hamburger" aria-label="Open menu" onclick="mobToggle()">
   <span></span><span></span><span></span>
 </button>
-<div class="mob-overlay" id="mob-overlay" onclick="closeMobileNav()"></div>
+<div class="mob-overlay" id="mob-overlay" onclick="mobClose()"></div>
 
 <!-- ═══════════════════ SIDEBAR ═══════════════════ -->
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
   <div class="sidebar-brand">
     <div class="brand-eyebrow">Brand Intelligence</div>
     <div class="brand-name">The <em>Elar</em></div>
@@ -1970,8 +1991,7 @@ body::after {
 
       <div class="sec-label">Margin architecture</div>
       <div class="card" style="margin-bottom:18px">
-        <div class="data-table-wrap">
-        <table class="data-table">
+        <div class="data-table-wrap"><table class="data-table">
           <thead><tr><th>Tier</th><th>Sell Price</th><th>Target COGS</th><th>Gross Margin (D2C)</th><th>Gross Margin (Marketplace)</th><th>Priority Metric</th></tr></thead>
           <tbody>
             <tr><td class="val">Tier 1 · Gateway</td><td>₹1,500–3,000</td><td>₹500–900</td><td class="warn">45–55%</td><td class="warn">30–40%</td><td>Volume + trial conversion</td></tr>
@@ -1979,8 +1999,7 @@ body::after {
             <tr><td class="val">Tier 3 · Signature</td><td>₹6,500–12,000</td><td>₹1,800–3,500</td><td class="good">62–70%</td><td class="good">48–58%</td><td>Brand perception + PR</td></tr>
             <tr><td class="val">Tier 4 · Limited</td><td>₹8,000–18,000</td><td>₹2,500–5,000</td><td class="good">65–72%</td><td>Not listed (D2C only)</td><td>Cultural moment + press</td></tr>
           </tbody>
-        </table>
-        </div>
+        </table></div>
         <div style="font-size:12px;color:#8a7a62;margin-top:12px;line-height:1.65">COGS includes fabric, manufacturing, packaging, and logistics but excludes marketing and CAC. Target overall blended gross margin of 58–62% at D2C maturity.</div>
       </div>
 
@@ -2080,8 +2099,7 @@ body::after {
 
       <div class="sec-label">Sourcing phase plan — what to do when</div>
       <div class="card" style="margin-bottom:18px">
-        <div class="priority-table-wrap">
-        <table class="priority-table">
+        <div class="priority-table-wrap"><table class="priority-table">
           <thead><tr><th>Phase</th><th>Cluster / Supplier</th><th>What to Source</th><th>Why First</th><th>Timing</th></tr></thead>
           <tbody>
             <tr><td><span class="pill pill-now">Phase 1</span></td><td class="tdname">Fabriclore + Jaipur block print</td><td>Core linen / cotton fabrics, surface prints</td><td>Low MOQ, fast lead times. Jaipur print labs understand small-batch fashion.</td><td>Months 1–3</td></tr>
@@ -2091,8 +2109,7 @@ body::after {
             <tr><td><span class="pill pill-later">Phase 3</span></td><td class="tdname">Kutch cooperatives (Khamir / Qasab)</td><td>Embroidered statement pieces, limited drops</td><td>Requires in-person visits. Long lead times. Worth it for signature and drops.</td><td>Months 9–14</td></tr>
             <tr><td><span class="pill pill-later">Phase 3</span></td><td class="tdname">Varanasi (direct master weavers)</td><td>Brocade detail pieces, festive limited drops</td><td>Highest prestige, most complex sourcing. Use sparingly — should feel like an event.</td><td>Months 12–18</td></tr>
           </tbody>
-        </table>
-        </div>
+        </table></div>
       </div>
 
       <div class="sec-label">Non-negotiable sourcing principles</div>
@@ -2422,8 +2439,6 @@ function switchPanel(id) {
       `<div class="hstat"><div class="hstat-val">${s.val}</div><div class="hstat-label">${s.label}</div></div>`
     ).join('');
   }
-  // Close mobile sidebar after navigation
-  if (window.innerWidth <= 768) closeMobileNav();
 }
 
 function switchSubTab(btn, id) {
@@ -2616,34 +2631,42 @@ function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ─── MOBILE NAV ──────────────────────────────────────────────────────────────
-function toggleMobileNav() {
-  const sidebar = document.querySelector('.sidebar');
+// ─── MOBILE NAV ─────────────────────────────────────────────────────────────
+function mobToggle() {
+  const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('mob-overlay');
-  const btn = document.getElementById('mob-hamburger');
-  const isOpen = sidebar.classList.contains('mob-open');
-  if (isOpen) {
-    closeMobileNav();
-  } else {
-    sidebar.classList.add('mob-open');
-    overlay.classList.add('visible');
-    btn.classList.add('open');
-    document.body.style.overflow = 'hidden';
+  const btn     = document.getElementById('mob-hamburger');
+  const isOpen  = sidebar.classList.contains('is-open');
+  if (isOpen) { mobClose(); }
+  else {
+    sidebar.classList.add('is-open');
+    overlay.classList.add('is-visible');
+    btn.classList.add('is-open');
+    // DO NOT set body overflow — that kills iOS touch scroll
   }
 }
 
-function closeMobileNav() {
-  const sidebar = document.querySelector('.sidebar');
+function mobClose() {
+  const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('mob-overlay');
-  const btn = document.getElementById('mob-hamburger');
-  sidebar.classList.remove('mob-open');
-  overlay.classList.remove('visible');
-  btn.classList.remove('open');
-  document.body.style.overflow = '';
+  const btn     = document.getElementById('mob-hamburger');
+  sidebar.classList.remove('is-open');
+  overlay.classList.remove('is-visible');
+  btn.classList.remove('is-open');
 }
+
+// Patch switchPanel to close sidebar on mobile after navigation
+const _sp = switchPanel;
+switchPanel = function(id) {
+  _sp(id);
+  if (window.innerWidth <= 768) mobClose();
+};
 
 // ─── INIT ───────────────────────────────────────────────────────────────────
 buildAll();
+// Restore saved documents on every load
+renderDocuments();
+updateDocStats();
 setTimeout(() => animateBars(document.getElementById('panel-market')), 120);
 </script>
 </body>
