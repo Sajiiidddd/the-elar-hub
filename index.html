@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; frame-src https://docs.google.com https://drive.google.com; img-src 'self' data:;">
 <title>The Elar — Brand Intelligence Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -2191,11 +2192,11 @@ body::before, body::after { content: none; }
         <div class="add-doc-form-sub">Paste the share link from Google Drive. The document will be embedded with a live preview below.</div>
         <div class="form-row">
           <div class="form-field">
-            <label>Document Title</label>
+            <label for="doc-input-title">Document Title</label>
             <input type="text" id="doc-input-title" placeholder="e.g. Q1 Campaign Plan" />
           </div>
           <div class="form-field">
-            <label>Type</label>
+            <label for="doc-input-type">Type</label>
             <select id="doc-input-type">
               <option value="doc">Google Doc</option>
               <option value="sheet">Google Sheet</option>
@@ -2207,13 +2208,13 @@ body::before, body::after { content: none; }
         </div>
         <div class="form-row">
           <div class="form-field form-full">
-            <label>Google Drive Share Link</label>
+            <label for="doc-input-url">Google Drive Share Link</label>
             <input type="url" id="doc-input-url" placeholder="https://docs.google.com/document/d/..." />
           </div>
         </div>
         <div class="form-row">
           <div class="form-field form-full">
-            <label>Description <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#bfb09a">(optional)</span></label>
+            <label for="doc-input-desc">Description <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#bfb09a">(optional)</span></label>
             <textarea id="doc-input-desc" rows="2" placeholder="Brief note about what this document covers…"></textarea>
           </div>
         </div>
@@ -2639,7 +2640,8 @@ function renderDocuments() {
               src="${escHtml(doc.embedUrl)}"
               allowfullscreen
               loading="lazy"
-              onload="document.getElementById('doc-loading-${doc.id}').style.opacity='0';setTimeout(()=>{const el=document.getElementById('doc-loading-${doc.id}');if(el)el.style.display='none'},300)"
+              data-loading-id="doc-loading-${doc.id}"
+              class="elar-iframe"
             ></iframe>
           </div>
         </div>
@@ -2651,10 +2653,31 @@ function renderDocuments() {
       </div>
     </div>`;
   }).join('');
+
+  // Attach load listeners to newly rendered iframes (CSP-safe, no inline strings)
+  setTimeout(attachIframeLoaders, 0);
 }
 
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Handle iframe load events via delegation — no inline onload strings (CSP safe)
+function attachIframeLoaders() {
+  document.querySelectorAll('iframe.elar-iframe').forEach(function(iframe) {
+    var loadingId = iframe.getAttribute('data-loading-id');
+    if (!loadingId || iframe._loaderAttached) return;
+    iframe._loaderAttached = true;
+    iframe.addEventListener('load', function() {
+      var loader = document.getElementById(loadingId);
+      if (!loader) return;
+      loader.style.opacity = '0';
+      setTimeout(function() {
+        var el = document.getElementById(loadingId);
+        if (el) el.style.display = 'none';
+      }, 300);
+    });
+  });
 }
 
 // ─── MOBILE NAV ─────────────────────────────────────────────────────────────
